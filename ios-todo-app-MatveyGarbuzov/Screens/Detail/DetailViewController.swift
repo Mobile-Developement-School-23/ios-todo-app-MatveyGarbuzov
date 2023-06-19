@@ -14,11 +14,15 @@ final class DetailViewController: UIViewController {
     
     return scrollView
   }()
+
+  private let textView = CustomTextView()
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
     setup()
+    setupConstraints()
+    setupKeyboard()
   }
   
   private func setup() {
@@ -30,6 +34,25 @@ final class DetailViewController: UIViewController {
     
     let saveButton = UIBarButtonItem(title: "Сохранить", style: .plain, target: self, action: #selector(saveButtonPressed))
     navigationItem.rightBarButtonItem = saveButton
+  }
+  
+  private func setupConstraints() {
+    view.addSubview(textView)
+    
+    textView.snp.makeConstraints { make in
+      make.top.equalTo(view.safeAreaLayoutGuide)
+      make.leading.trailing.equalToSuperview().inset(16)
+      make.height.greaterThanOrEqualTo(100)
+    }
+  }
+  
+  private func setupKeyboard() {
+    let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+    view.addGestureRecognizer(tap)
+  }
+  
+  @objc func dismissKeyboard() {
+    view.endEditing(true)
   }
   
   @objc func cancelButtonPressed() {
