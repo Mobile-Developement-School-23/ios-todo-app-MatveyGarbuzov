@@ -23,15 +23,15 @@ final class CustomTextView : UITextView {
   override init(frame: CGRect, textContainer: NSTextContainer?) {
     super.init(frame: frame, textContainer: textContainer)
     
-    commonInit()
+    customInit()
   }
   
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
-    commonInit()
+    customInit()
   }
   
-  private func commonInit() {
+  private func customInit() {
     setup()
     setupPlaceholder()
   }
