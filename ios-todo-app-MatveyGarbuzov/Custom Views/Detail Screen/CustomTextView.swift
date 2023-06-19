@@ -10,13 +10,9 @@ import UIKit
 final class CustomTextView : UITextView {
   
   private lazy var placeholderLabel: UILabel = {
-    let label = UILabel()
-    label.text = "Что надо сделать?"
-    label.font = .systemFont(ofSize: 16)
+    let label = UILabel.body(with: "Что надо сделать?")
     label.sizeToFit()
-    label.textColor = .tertiaryLabel
-    label.isHidden = !self.text.isEmpty
-    
+    label.textColor = UIColor.aLabelTertiary
     return label
   }()
   
@@ -61,6 +57,6 @@ extension CustomTextView : UITextViewDelegate {
     placeholderLabel.isHidden = !textView.text.isEmpty
   }
   func textViewDidBeginEditing(_ textView: UITextView) {
-    placeholderLabel.isHidden = true
+    placeholderLabel.isHidden = !textView.text.isEmpty
   }
 }
