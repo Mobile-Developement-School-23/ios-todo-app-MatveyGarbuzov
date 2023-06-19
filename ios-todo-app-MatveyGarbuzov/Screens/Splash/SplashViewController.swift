@@ -57,7 +57,7 @@ final class SplashViewController: UIViewController {
         
       } completion: { done in
         if done {
-          let viewController = UINavigationController(rootViewController: ViewController())
+          let viewController = UINavigationController(rootViewController: ToDoListViewController())
           viewController.modalTransitionStyle = .crossDissolve
           viewController.modalPresentationStyle = .fullScreen
           self.present(viewController, animated: true)
