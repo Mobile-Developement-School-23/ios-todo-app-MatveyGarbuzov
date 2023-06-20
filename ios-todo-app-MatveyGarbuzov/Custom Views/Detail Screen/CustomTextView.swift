@@ -33,6 +33,7 @@ final class CustomTextView : UITextView {
   }
   
   private func setup() {
+    backgroundColor = .aBackSecondary
     isScrollEnabled = false
     layer.cornerRadius = 16
     delegate = self
@@ -45,7 +46,7 @@ final class CustomTextView : UITextView {
     let leftInset = self.textContainerInset.left
     let topInset = self.textContainerInset.top
     
-    placeholderLabel.frame.origin = CGPoint(x: leftInset, y: topInset)
+    placeholderLabel.frame.origin = CGPoint(x: leftInset+3, y: topInset)
   }
 }
 
