@@ -37,9 +37,9 @@ final class ImportanceHorizontalStack: UIView {
        
     segmentedControl.selectedSegmentIndex = 1
     
-    // TODO: Исправить цвет на .aOverlay или оставить .black
+    // TODO: Исправить цвет на .aOverlay или оставить .aBackIOSPrimary
     // (дизайн в figma расходится с отображением на симуляторе)
-    segmentedControl.backgroundColor = .black//.aOverlay
+    segmentedControl.backgroundColor = .aBackIOSPrimary//.aOverlay
     segmentedControl.selectedSegmentTintColor = .aBackElevated
     
     return segmentedControl
@@ -66,7 +66,8 @@ final class ImportanceHorizontalStack: UIView {
     hStack.addArrangedSubview(segmentedControl)
     
     hStack.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(12)
+      make.leading.equalToSuperview().inset(16)
+      make.trailing.equalToSuperview().inset(12)
       make.top.bottom.equalToSuperview().inset(10)
     }
     
@@ -78,8 +79,8 @@ final class ImportanceHorizontalStack: UIView {
   }
   
   private func setup() {
-    backgroundColor = .aBackSecondary
-    layer.cornerRadius = 15
+//    backgroundColor = .aBackSecondary
+//    layer.cornerRadius = 15
   }
 }
 
