@@ -17,6 +17,7 @@
 		1C10CCA62A419D4100760713 /* DeadlineHorizontalStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C10CCA52A419D4100760713 /* DeadlineHorizontalStack.swift */; };
 		1C10CCA82A41B84500760713 /* DetailVerticalStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C10CCA72A41B84500760713 /* DetailVerticalStack.swift */; };
 		1C10CCAC2A42FB7500760713 /* CustomFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C10CCAB2A42FB7500760713 /* CustomFonts.swift */; };
+		1C10CCB02A434CA000760713 /* ContainerStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C10CCAF2A434CA000760713 /* ContainerStack.swift */; };
 		1C1274082A3D293200E6C952 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1274072A3D293200E6C952 /* AppDelegate.swift */; };
 		1C12740A2A3D293200E6C952 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1274092A3D293200E6C952 /* SceneDelegate.swift */; };
 		1C12740C2A3D293200E6C952 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C12740B2A3D293200E6C952 /* SplashViewController.swift */; };
@@ -61,6 +62,7 @@
 		1C10CCA52A419D4100760713 /* DeadlineHorizontalStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeadlineHorizontalStack.swift; sourceTree = "<group>"; };
 		1C10CCA72A41B84500760713 /* DetailVerticalStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailVerticalStack.swift; sourceTree = "<group>"; };
 		1C10CCAB2A42FB7500760713 /* CustomFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFonts.swift; sourceTree = "<group>"; };
+		1C10CCAF2A434CA000760713 /* ContainerStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerStack.swift; sourceTree = "<group>"; };
 		1C1274042A3D293200E6C952 /* ios-todo-app-MatveyGarbuzov.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ios-todo-app-MatveyGarbuzov.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C1274072A3D293200E6C952 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1C1274092A3D293200E6C952 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 		1C10CCA02A404D7A00760713 /* Detail Screen */ = {
 			isa = PBXGroup;
 			children = (
+				1C10CCAF2A434CA000760713 /* ContainerStack.swift */,
 				1C10CC9D2A403ECE00760713 /* CustomTextView.swift */,
 				1C10CCA12A404FFF00760713 /* ImportanceHorizontalStack.swift */,
 				1C10CCA52A419D4100760713 /* DeadlineHorizontalStack.swift */,
@@ -393,6 +396,7 @@
 				1C10CC9E2A403ECE00760713 /* CustomTextView.swift in Sources */,
 				1C10CC922A40356E00760713 /* CustomColors.swift in Sources */,
 				1C1274462A3D2A8400E6C952 /* ToDoCell.swift in Sources */,
+				1C10CCB02A434CA000760713 /* ContainerStack.swift in Sources */,
 				1C1274082A3D293200E6C952 /* AppDelegate.swift in Sources */,
 				1C1274402A3D2A4E00E6C952 /* ToDoListViewController.swift in Sources */,
 				1C10CCA82A41B84500760713 /* DetailVerticalStack.swift in Sources */,

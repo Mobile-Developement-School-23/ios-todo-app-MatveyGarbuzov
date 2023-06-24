@@ -7,6 +7,11 @@
 
 import UIKit
 
+protocol ToggleDatePickerDelegate: AnyObject {
+  func toggleDatePicker()
+  func hideDatePicker()
+}
+
 final class DeadlineHorizontalStack: UIView {
   
   weak var delegate: ToggleDatePickerDelegate?
@@ -40,7 +45,11 @@ final class DeadlineHorizontalStack: UIView {
   }()
 
   lazy private var spacer = UIView()
-  lazy private var deadlineSwitch = UISwitch()
+  lazy private var deadlineSwitch: UISwitch = {
+    let deadlineSwitch = UISwitch()
+    
+    return deadlineSwitch
+  }()
   
   override init(frame: CGRect) {
     super.init(frame: frame)

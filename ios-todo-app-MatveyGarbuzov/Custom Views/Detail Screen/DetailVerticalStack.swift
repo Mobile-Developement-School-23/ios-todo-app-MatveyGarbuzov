@@ -7,12 +7,13 @@
 
 import UIKit
 
-protocol ToggleDatePickerDelegate: AnyObject {
-  func toggleDatePicker()
-  func hideDatePicker()
+protocol DetailVStackDelegate: AnyObject {
+    func didReceiveNewValue(_ value: Date)
 }
 
 final class DetailVerticalStack: UIView {
+  
+  weak var delegate: DetailVStackDelegate?
   
   var isCalendarHidden = true
 
@@ -79,7 +80,7 @@ final class DetailVerticalStack: UIView {
     }
     
     spacer1.snp.makeConstraints { make in
-      make.height.equalTo(0.5)
+      make.height.equalTo(1)
       make.leading.trailing.equalToSuperview().inset(16)
     }
     
@@ -119,7 +120,14 @@ final class DetailVerticalStack: UIView {
   }
   
   @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
-    print("Выбранная дата: ")
+    delegate?.didReceiveNewValue(sender.date)
+    
+    // Обрабатываем выбранную дату
+//    let dateFormatter = DateFormatter()
+//    dateFormatter.dateFormat = "dd MMMM yyyy"
+//    let selectedDate = dateFormatter.string(from: sender.date)
+//    print("Выбранная дата: \(selectedDate)")
+//    print("--Выбранная дата: \(sender.date)")
   }
 }
 
@@ -143,9 +151,10 @@ extension DetailVerticalStack: ToggleDatePickerDelegate {
     datePickerView.snp.updateConstraints { make in
       make.height.equalTo(330)
     }
+    datePickerView.alpha = 1
     
     spacer2.snp.updateConstraints { make in
-      make.height.equalTo(0.5)
+      make.height.equalTo(1)
     }
   }
   
@@ -153,6 +162,7 @@ extension DetailVerticalStack: ToggleDatePickerDelegate {
     datePickerView.snp.updateConstraints { make in
       make.height.equalTo(0)
     }
+    datePickerView.alpha = 0
     
     spacer2.snp.updateConstraints { make in
       make.height.equalTo(0)

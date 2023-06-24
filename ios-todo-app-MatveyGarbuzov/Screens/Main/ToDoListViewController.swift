@@ -26,9 +26,11 @@ class ToDoListViewController: UIViewController {
     setupConstraints()
     addAction()
     viewModel.loadData()
+    plusButtonPressed()
   }
   
   private func setupNavBar() {
+    view.backgroundColor = .aBackIOSPrimary
     title = "Мои дела"
     navigationController?.navigationBar.prefersLargeTitles = true
   }

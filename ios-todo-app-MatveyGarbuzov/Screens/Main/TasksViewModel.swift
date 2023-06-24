@@ -12,7 +12,7 @@ class TasksViewModel {
   
   func loadData() {
     let fileCache = FileCache()
-    let fileName = "qqwe"
+    let fileName = "ToDoItems"
     
     do {
       try fileCache.load(from: fileName)
@@ -21,7 +21,7 @@ class TasksViewModel {
       }
       print("\(fileCache.itemsDict.count) ToDoItems from \(fileName) loaded succefully!")
     } catch {
-      print("Error. Can't find such file!")
+      print("ERROR. Can't find such file!")
       
       // Creating destination directory URL
       guard let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
@@ -29,7 +29,16 @@ class TasksViewModel {
         return
       }
       let fileURL = URL(fileURLWithPath: fileName, relativeTo: directoryURL).appendingPathExtension("json")
-      print("Try to add *\(fileName).json* in directory: \(fileURL.absoluteURL)")
+      
+      print("=======")
+      print("Add *\(fileName).json* in directory: \(fileURL.absoluteURL)")
+      print("=======")
+      print()
+    }
+    
+    if toDoItems.count == 0 {
+      toDoItems.append(ToDoItem(text: "Проверьте консоль Xcode", importance: .important, deadline: nil, changedAt: nil))
+      toDoItems.append(ToDoItem(text: "Нет сохранённых задач", importance: .important, deadline: nil, changedAt: nil))
     }
   }
   

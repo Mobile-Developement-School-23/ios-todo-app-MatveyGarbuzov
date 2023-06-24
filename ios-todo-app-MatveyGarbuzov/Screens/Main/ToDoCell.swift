@@ -60,6 +60,7 @@ class ToDoCell: UITableViewCell {
   
   func configure(with viewModel: ToDoCellViewModel) {
     nameLabel.text = "\(viewModel.text)"
+    backgroundColor = .aBackSecondary
   }
   
   @objc func didTapDoneButton() {

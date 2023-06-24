@@ -7,7 +7,14 @@
 
 import UIKit
 
+protocol KeyboardShowOrHide: AnyObject {
+  func show()
+  func hide()
+}
+
 final class CustomTextView : UITextView {
+  
+  weak var keyboardDelegate: KeyboardShowOrHide?
   
   private lazy var placeholderLabel: UILabel = {
     let label = UILabel.body(with: "Что надо сделать?")
@@ -56,8 +63,12 @@ extension CustomTextView : UITextViewDelegate {
   }
   func textViewDidEndEditing(_ textView: UITextView) {
     placeholderLabel.isHidden = !textView.text.isEmpty
+    print("textViewDidEndEditing")
+    keyboardDelegate?.hide()
   }
   func textViewDidBeginEditing(_ textView: UITextView) {
     placeholderLabel.isHidden = !textView.text.isEmpty
+    print("textViewDidBeginEditing")
+    keyboardDelegate?.show()
   }
 }
