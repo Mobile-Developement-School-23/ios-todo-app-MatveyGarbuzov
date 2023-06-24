@@ -10,7 +10,11 @@ import SnapKit
 
 final class DetailViewController: UIViewController {
   
+  let fileCache = FileCache()
+  let fileName = "ToDoItem"
+  
   var scrollViewBottomConstraint: Constraint?
+  var toDoItem = ToDoItem(text: "Файл не был обнаружен, создан новый", importance: .normal, deadline: nil, changedAt: nil)
   
   lazy private var scrollView: UIScrollView = {
     let scrollView = UIScrollView()
@@ -26,10 +30,14 @@ final class DetailViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
+    loadToDoItem()
+    
     setup()
     setupConstraints()
     setupKeyboard()
     observer()
+    
+    setValues()
   }
   
   override func viewDidLayoutSubviews() {
@@ -50,6 +58,70 @@ final class DetailViewController: UIViewController {
       name: UIResponder.keyboardWillHideNotification,
       object: nil
     )
+  }
+  
+  private func loadToDoItem() {
+    do {
+      try fileCache.load(from: fileName)
+      print("ToDoItem from \(fileName) loaded succefully!")
+      toDoItem = fileCache.itemsDict.values.first ?? ToDoItem(
+                                                        text: "1234",
+                                                        importance: .normal,
+                                                        deadline: nil,
+                                                        changedAt: nil)
+    } catch {
+      print("No such file as \(fileName).json!")
+      print("Creating \(fileName) file")
+      
+      do {
+        fileCache.addTask(toDoItem)
+        try fileCache.save(to: fileName)
+      } catch {
+        print("Error with saving")
+      }
+    }
+    
+    print("Loaded: \(toDoItem.text), \(toDoItem.importance), \(String(describing: toDoItem.deadline))")
+    print()
+    print()
+    print()
+  }
+  
+  private func setValues() {
+    self.container.setValues(text: toDoItem.text, importance: toDoItem.importance, deadline: toDoItem.deadline)
+  }
+  
+  private func saveItem() {
+    print()
+    print()
+    print()
+    print("BEFORE: ",toDoItem)
+    print()
+    print()
+    print()
+    // Убираем старый ToDoItem
+    fileCache.removeTask(id: toDoItem.id)
+    
+    // Обновляем с новыми значениями
+    let text = container.getText()
+    let importance = container.getImportance()
+    let deadline = container.getDeadline()
+    toDoItem = ToDoItem(text: text, importance: importance, deadline: deadline, changedAt: Date())
+    
+    print("AFTER: ",toDoItem)
+    print()
+    print()
+    print()
+    
+    // Загружаем в FileCache
+    do {
+      fileCache.addTask(toDoItem)
+      
+      try fileCache.save(to: fileName)
+      print("Successfully saved \(toDoItem)")
+    } catch {
+      print("Error with saving")
+    }
   }
   
   private func observer() {
@@ -118,6 +190,7 @@ final class DetailViewController: UIViewController {
   
   @objc func saveButtonPressed() {
     print("Save button pressed")
+    saveItem()
     dismiss(animated: true)
   }
   

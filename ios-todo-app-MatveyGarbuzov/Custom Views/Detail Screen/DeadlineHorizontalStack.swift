@@ -60,6 +60,14 @@ final class DeadlineHorizontalStack: UIView {
     fatalError("init(coder:) has not been implemented")
   }
   
+  func setDeadline(_ date: Date?) {
+    deadlineDateLabel.text = date?.toFormattedString() ?? Date().nextDayInString()
+  }
+  
+  func getDeadline() -> Date? {
+    deadlineLabel.text?.toDate(format: "d MMMM yyyy")
+  }
+  
   private func customInit() {
     setupVStack()
     addActions()
@@ -147,5 +155,19 @@ extension Date {
     dateFormatter.dateFormat = "d MMMM yyyy"
     let dateString = dateFormatter.string(from: tomorrowDate)
     return dateString
+  }
+  
+  func toFormattedString() -> String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "d MMMM yyyy"
+    return formatter.string(from: self)
+  }
+}
+
+extension String {
+  func toDate(format: String) -> Date? {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = self
+    return dateFormatter.date(from: self)
   }
 }

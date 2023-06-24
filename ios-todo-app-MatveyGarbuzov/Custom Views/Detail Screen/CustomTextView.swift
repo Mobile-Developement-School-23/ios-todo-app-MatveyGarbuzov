@@ -20,6 +20,7 @@ final class CustomTextView : UITextView {
     let label = UILabel.body(with: "Что надо сделать?")
     label.sizeToFit()
     label.textColor = UIColor.aLabelTertiary
+    label.isHidden = true
     return label
   }()
   
@@ -32,6 +33,17 @@ final class CustomTextView : UITextView {
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
     customInit()
+  }
+  
+  func setText(with text: String) {
+    self.text = text
+    if text == "" {
+      placeholderLabel.isHidden = false
+    }
+  }
+  
+  func getText() -> String {
+    return self.text
   }
   
   private func customInit() {

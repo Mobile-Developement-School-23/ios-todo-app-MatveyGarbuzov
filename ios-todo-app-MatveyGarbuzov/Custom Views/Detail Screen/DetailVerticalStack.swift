@@ -33,6 +33,9 @@ final class DetailVerticalStack: UIView {
     let datePicker = UIDatePicker()
     datePicker.datePickerMode = .date
     datePicker.preferredDatePickerStyle = .inline
+    datePicker.calendar.firstWeekday = 2
+    let calendar = Calendar.current
+    datePicker.minimumDate = calendar.startOfDay(for: Date())
     
     return datePicker
   }()
@@ -58,6 +61,22 @@ final class DetailVerticalStack: UIView {
   
   required init(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+  
+  func setImportance(with importance: Importance) {
+    importanceHStack.setImportance(importance)
+  }
+  
+  func setDeadline(with date: Date?) {
+    deadlineHStack.setDeadline(date)
+  }
+  
+  func getImportance() -> Importance {
+    importanceHStack.getImportance()
+  }
+  
+  func getDeadline() -> Date? {
+    deadlineHStack.getDeadline()
   }
   
   private func customInit() {
@@ -123,11 +142,11 @@ final class DetailVerticalStack: UIView {
     delegate?.didReceiveNewValue(sender.date)
     
     // Обрабатываем выбранную дату
-//    let dateFormatter = DateFormatter()
-//    dateFormatter.dateFormat = "dd MMMM yyyy"
-//    let selectedDate = dateFormatter.string(from: sender.date)
-//    print("Выбранная дата: \(selectedDate)")
-//    print("--Выбранная дата: \(sender.date)")
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "dd MMMM yyyy"
+    let selectedDate = dateFormatter.string(from: sender.date)
+    print("Выбранная дата: \(selectedDate)")
+    print("--Выбранная дата: \(sender.date)")
   }
 }
 

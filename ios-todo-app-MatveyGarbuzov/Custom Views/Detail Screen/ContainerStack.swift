@@ -49,12 +49,28 @@ final class ContainerStack: UIView {
   override init(frame: CGRect) {
     super.init(frame: frame)
     customInit()
-    
-//    textView.keyboardDelegate = self
   }
   
   required init(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+  
+  func setValues(text: String, importance: Importance, deadline: Date?) {
+    self.textView.setText(with: text)
+    self.vStack.setImportance(with: importance)
+    self.vStack.setDeadline(with: deadline)
+  }
+  
+  func getText() -> String {
+    self.textView.getText()
+  }
+  
+  func getImportance() -> Importance {
+    self.vStack.getImportance()
+  }
+  
+  func getDeadline() -> Date? {
+    self.vStack.getDeadline()
   }
   
   func customInit() {
@@ -85,14 +101,3 @@ final class ContainerStack: UIView {
     containerHeightDelegate?.update(with: deleteButton.frame.maxY)
   }
 }
-
-//
-//extension ContainerStack: KeyboardShowOrHide {
-//  func show() {
-//    print("Show keyboard")
-//  }
-//
-//  func hide() {
-//    print("Hide keyboard")
-//  }
-//}

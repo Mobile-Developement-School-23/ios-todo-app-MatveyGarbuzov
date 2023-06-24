@@ -35,7 +35,7 @@ final class ImportanceHorizontalStack: UIView {
     segmentedControl.insertSegment(withTitle: "нет", at: 1, animated: false)
     segmentedControl.insertSegment(with: importantImageView.image, at: 2, animated: false)
        
-    segmentedControl.selectedSegmentIndex = 1
+//    segmentedControl.selectedSegmentIndex = 1
     
     // TODO: Исправить цвет на .aOverlay или оставить .aBackIOSPrimary
     // (дизайн в figma расходится с отображением на симуляторе)
@@ -52,6 +52,31 @@ final class ImportanceHorizontalStack: UIView {
   
   required init(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+  
+  func setImportance(_ importance: Importance) {
+    print(importance)
+    switch importance {
+    case .unimportant:
+      segmentedControl.selectedSegmentIndex = 0
+    case .normal:
+      segmentedControl.selectedSegmentIndex = 1
+    case .important:
+      segmentedControl.selectedSegmentIndex = 2
+    }
+  }
+  
+  func getImportance() -> Importance {
+    switch segmentedControl.selectedSegmentIndex {
+    case 0:
+      return .unimportant
+    case 1:
+      return .normal
+    case 2:
+      return .important
+    default:
+      return .normal
+    }
   }
   
   private func customInit() {

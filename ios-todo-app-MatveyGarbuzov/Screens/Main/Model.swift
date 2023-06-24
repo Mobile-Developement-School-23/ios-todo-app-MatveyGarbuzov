@@ -75,8 +75,6 @@ extension ToDoItem {
     guard let jsonDictionary = json as? [String: Any],
           let id = jsonDictionary["id"] as? String,
           let text = jsonDictionary["text"] as? String,
-          let importanceString = jsonDictionary["importance"] as? String,
-          let importance = Importance(rawValue: importanceString),
           let createdAtTimestamp = jsonDictionary["createdAt"] as? TimeInterval else {
       return nil
     }
@@ -84,7 +82,9 @@ extension ToDoItem {
     let deadlineTimestamp = jsonDictionary["deadline"] as? TimeInterval
     let changedAtTimestamp = jsonDictionary["changedAt"] as? TimeInterval
     let isDone = jsonDictionary["isDone"] as? Bool ?? false
-
+    
+    let importanceString = jsonDictionary["importance"] as? String ?? "normal"
+    let importance = Importance(rawValue: importanceString.lowercased()) ?? .normal
     let createdAt = Date(timeIntervalSince1970: createdAtTimestamp)
     let deadline = deadlineTimestamp.flatMap { Date(timeIntervalSince1970: $0) }
     let changedAt = changedAtTimestamp.flatMap { Date(timeIntervalSince1970: $0) }
