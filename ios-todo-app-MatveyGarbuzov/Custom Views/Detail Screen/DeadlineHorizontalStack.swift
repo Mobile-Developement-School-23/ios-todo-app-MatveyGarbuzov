@@ -133,7 +133,6 @@ final class DeadlineHorizontalStack: UIView {
   }
   
   @objc func dateLabelTapped() {
-    print("Date tapped!")
     delegate?.toggleDatePicker()
   }
 }

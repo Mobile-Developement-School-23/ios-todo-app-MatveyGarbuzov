@@ -63,12 +63,10 @@ extension CustomTextView : UITextViewDelegate {
   }
   func textViewDidEndEditing(_ textView: UITextView) {
     placeholderLabel.isHidden = !textView.text.isEmpty
-    print("textViewDidEndEditing")
     keyboardDelegate?.hide()
   }
   func textViewDidBeginEditing(_ textView: UITextView) {
     placeholderLabel.isHidden = !textView.text.isEmpty
-    print("textViewDidBeginEditing")
     keyboardDelegate?.show()
   }
 }

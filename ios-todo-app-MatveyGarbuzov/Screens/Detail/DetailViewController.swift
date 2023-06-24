@@ -142,7 +142,6 @@ final class DetailViewController: UIViewController {
 
 extension DetailViewController: UpdateContainerHeightDelegate {
   func update(with height: CGFloat) {
-    print("UPDATE DetailViewController")
     scrollView.contentSize.height = height
     
     container.snp.remakeConstraints { make in

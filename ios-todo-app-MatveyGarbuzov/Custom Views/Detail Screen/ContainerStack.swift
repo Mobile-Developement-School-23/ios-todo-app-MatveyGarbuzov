@@ -50,7 +50,7 @@ final class ContainerStack: UIView {
     super.init(frame: frame)
     customInit()
     
-    textView.keyboardDelegate = self
+//    textView.keyboardDelegate = self
   }
   
   required init(coder: NSCoder) {
@@ -82,18 +82,17 @@ final class ContainerStack: UIView {
   
   override func layoutIfNeeded() {
     super.layoutIfNeeded()
-    print("layoutIfNeeded from Container: \(deleteButton.frame.maxY)")
     containerHeightDelegate?.update(with: deleteButton.frame.maxY)
   }
 }
 
-
-extension ContainerStack: KeyboardShowOrHide {
-  func show() {
-    print("Show keyboard")
-  }
-  
-  func hide() {
-    print("Hide keyboard")
-  }
-}
+//
+//extension ContainerStack: KeyboardShowOrHide {
+//  func show() {
+//    print("Show keyboard")
+//  }
+//
+//  func hide() {
+//    print("Hide keyboard")
+//  }
+//}
