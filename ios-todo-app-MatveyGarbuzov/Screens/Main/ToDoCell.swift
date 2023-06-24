@@ -59,7 +59,8 @@ class ToDoCell: UITableViewCell {
   }
   
   func configure(with viewModel: ToDoCellViewModel) {
-    nameLabel.text = "\(viewModel.id) \(viewModel.createdAt.formatted())"
+    nameLabel.text = "\(viewModel.text)"
+    backgroundColor = .aBackSecondary
   }
   
   @objc func didTapDoneButton() {
