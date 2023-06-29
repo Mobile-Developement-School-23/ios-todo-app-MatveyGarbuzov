@@ -19,15 +19,7 @@ protocol UpdateContainerHeightDelegate: AnyObject {
 final class ContainerStack: UIView {
   
   weak var containerHeightDelegate: UpdateContainerHeightDelegate?
-  
-  private lazy var stack: UIStackView = {
-    let stack = UIStackView()
-    stack.axis = .vertical
-    stack.alignment = .center
     
-    return stack
-  }()
-  
   private let textView = CustomTextView()
   private let vStack = DetailVerticalStack()
   

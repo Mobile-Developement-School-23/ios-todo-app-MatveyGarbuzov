@@ -83,6 +83,7 @@ final class ToDoCell: UITableViewCell {
   private func customInit() {
     setupConstraints()
     backgroundColor = .clear
+    selectionStyle = .none
   }
   
   private func setupConstraints() {

@@ -9,21 +9,7 @@ import UIKit
 
 class ToDoListViewController: UIViewController {
   
-  private lazy var doneHStack = DoneHStack()
-  
-  private lazy var toDoListTableView: UITableView = {
-    let tableView = UITableView()
-    tableView.backgroundColor = .clear
-    tableView.estimatedRowHeight = UITableView.automaticDimension
-    tableView.backgroundColor = .aBackSecondary
-    tableView.layer.cornerRadius = 16
-    tableView.showsVerticalScrollIndicator = false
-    
-    return tableView
-  }()
-  
-//  private lazy var toDoListTableView = TableViewContainer()
-  private lazy var plusButton = PlusButton()
+  private lazy var tableViewContainer = TableViewContainer()
   
   var viewModel = TasksViewModel()
   
@@ -32,12 +18,26 @@ class ToDoListViewController: UIViewController {
     
     setupNavBar()
     setupConstraints()
-    addAction()
     viewModel.loadData()
-//    plusButtonPressed()
-    setupTableView()
+    setupDelegates()
   }
   
+  private func setupDelegates() {
+    tableViewContainer.buttonContainerDelegate = self
+    tableViewContainer.delegate = self
+    tableViewContainer.dataSource = self
+  }
+  
+  private func setupConstraints() {
+    view.addSubview(tableViewContainer)
+    
+    tableViewContainer.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
+    }
+  }
+}
+
+extension ToDoListViewController {
   private func setupNavBar() {
     view.backgroundColor = .aBackIOSPrimary
     title = "Мои дела"
@@ -50,45 +50,6 @@ class ToDoListViewController: UIViewController {
         margins.left = 32
         navigationController?.navigationBar.layoutMargins = margins
     }
-  }
-  
-  private func setupTableView() {
-    toDoListTableView.delegate = self
-    toDoListTableView.dataSource = self
-    toDoListTableView.register(ToDoCell.self, forCellReuseIdentifier: "ToDoCell")
-  }
-  
-  private func setupConstraints() {
-    view.addSubview(doneHStack)
-    view.addSubview(toDoListTableView)
-    view.addSubview(plusButton)
-    
-    doneHStack.snp.makeConstraints { make in
-      make.height.equalTo(20)
-      make.leading.trailing.equalToSuperview().inset(32)
-      make.top.equalTo(view.safeAreaLayoutGuide).offset(8)
-    }
-    
-    toDoListTableView.snp.makeConstraints { make in
-      make.top.equalTo(doneHStack.snp.bottom).offset(12)
-      make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(10)
-      make.bottom.equalToSuperview()
-    }
-    
-    plusButton.snp.makeConstraints { make in
-      make.width.height.equalTo(44)
-      make.centerX.equalToSuperview()
-      make.bottom.equalTo(view.safeAreaLayoutGuide)
-    }
-  }
-  
-  private func addAction() {
-    plusButton.addTarget(self, action: #selector(plusButtonPressed), for: .touchUpInside)
-  }
-  
-  @objc func plusButtonPressed() {
-    let presentVC = UINavigationController(rootViewController: DetailViewController())
-    navigationController?.present(presentVC, animated: true)
   }
 }
 
@@ -115,3 +76,11 @@ extension ToDoListViewController: UITableViewDataSource {
     return cell
   }
 }
+
+extension ToDoListViewController: ButtonContainerDelegate {
+  func plusButtonPressed() {
+    let presentVC = UINavigationController(rootViewController: DetailViewController())
+    navigationController?.present(presentVC, animated: true)
+  }
+}
+
