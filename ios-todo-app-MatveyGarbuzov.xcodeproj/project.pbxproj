@@ -32,6 +32,8 @@
 		1C1274422A3D2A5F00E6C952 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1274412A3D2A5F00E6C952 /* Model.swift */; };
 		1C1274442A3D2A7000E6C952 /* ToDoCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1274432A3D2A7000E6C952 /* ToDoCellModel.swift */; };
 		1C1274462A3D2A8400E6C952 /* ToDoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C1274452A3D2A8400E6C952 /* ToDoCell.swift */; };
+		1C2271AA2A4C567E001A1CE3 /* DoneHStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2271A92A4C567E001A1CE3 /* DoneHStack.swift */; };
+		1C2271AC2A4C70A3001A1CE3 /* TableViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2271AB2A4C70A2001A1CE3 /* TableViewContainer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +82,8 @@
 		1C1274412A3D2A5F00E6C952 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		1C1274432A3D2A7000E6C952 /* ToDoCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoCellModel.swift; sourceTree = "<group>"; };
 		1C1274452A3D2A8400E6C952 /* ToDoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoCell.swift; sourceTree = "<group>"; };
+		1C2271A92A4C567E001A1CE3 /* DoneHStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoneHStack.swift; sourceTree = "<group>"; };
+		1C2271AB2A4C70A2001A1CE3 /* TableViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewContainer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +143,8 @@
 			isa = PBXGroup;
 			children = (
 				1C10CC942A40374900760713 /* PlusButton.swift */,
+				1C2271A92A4C567E001A1CE3 /* DoneHStack.swift */,
+				1C2271AB2A4C70A2001A1CE3 /* TableViewContainer.swift */,
 			);
 			path = "Main Screen";
 			sourceTree = "<group>";
@@ -392,6 +398,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1C1274422A3D2A5F00E6C952 /* Model.swift in Sources */,
+				1C2271AC2A4C70A3001A1CE3 /* TableViewContainer.swift in Sources */,
 				1C12740C2A3D293200E6C952 /* SplashViewController.swift in Sources */,
 				1C10CC9E2A403ECE00760713 /* CustomTextView.swift in Sources */,
 				1C10CC922A40356E00760713 /* CustomColors.swift in Sources */,
@@ -409,6 +416,7 @@
 				1C10CC952A40374900760713 /* PlusButton.swift in Sources */,
 				1C10CC9A2A40384700760713 /* TasksViewModel.swift in Sources */,
 				1C10CCA62A419D4100760713 /* DeadlineHorizontalStack.swift in Sources */,
+				1C2271AA2A4C567E001A1CE3 /* DoneHStack.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

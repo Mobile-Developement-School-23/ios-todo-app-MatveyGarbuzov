@@ -9,12 +9,20 @@ import UIKit
 
 class ToDoListViewController: UIViewController {
   
+  private lazy var doneHStack = DoneHStack()
+  
   private lazy var toDoListTableView: UITableView = {
     let tableView = UITableView()
     tableView.backgroundColor = .clear
+    tableView.estimatedRowHeight = UITableView.automaticDimension
+    tableView.backgroundColor = .aBackSecondary
+    tableView.layer.cornerRadius = 16
+    tableView.showsVerticalScrollIndicator = false
+    
     return tableView
   }()
   
+//  private lazy var toDoListTableView = TableViewContainer()
   private lazy var plusButton = PlusButton()
   
   var viewModel = TasksViewModel()
@@ -26,26 +34,44 @@ class ToDoListViewController: UIViewController {
     setupConstraints()
     addAction()
     viewModel.loadData()
-    plusButtonPressed()
+//    plusButtonPressed()
+    setupTableView()
   }
   
   private func setupNavBar() {
     view.backgroundColor = .aBackIOSPrimary
     title = "Мои дела"
+    
+    let attributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 34), .kern: 0.37]
+    navigationController?.navigationBar.largeTitleTextAttributes = attributes
     navigationController?.navigationBar.prefersLargeTitles = true
+   
+    if var margins = navigationController?.navigationBar.layoutMargins {
+        margins.left = 32
+        navigationController?.navigationBar.layoutMargins = margins
+    }
   }
   
-  private func setupConstraints() {
-    view.addSubview(toDoListTableView)
-    view.addSubview(plusButton)
-    
+  private func setupTableView() {
     toDoListTableView.delegate = self
     toDoListTableView.dataSource = self
     toDoListTableView.register(ToDoCell.self, forCellReuseIdentifier: "ToDoCell")
+  }
+  
+  private func setupConstraints() {
+    view.addSubview(doneHStack)
+    view.addSubview(toDoListTableView)
+    view.addSubview(plusButton)
+    
+    doneHStack.snp.makeConstraints { make in
+      make.height.equalTo(20)
+      make.leading.trailing.equalToSuperview().inset(32)
+      make.top.equalTo(view.safeAreaLayoutGuide).offset(8)
+    }
     
     toDoListTableView.snp.makeConstraints { make in
-      make.top.equalTo(view.safeAreaLayoutGuide)
-      make.leading.trailing.equalToSuperview().inset(10)
+      make.top.equalTo(doneHStack.snp.bottom).offset(12)
+      make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(10)
       make.bottom.equalToSuperview()
     }
     
@@ -64,29 +90,12 @@ class ToDoListViewController: UIViewController {
     let presentVC = UINavigationController(rootViewController: DetailViewController())
     navigationController?.present(presentVC, animated: true)
   }
-  
-  @objc func saveButtonPressed() throws {
-    print("Saving file with \(viewModel.toDoItems.count) ToDoItems!")
-    
-    let fileCache = FileCache()
-    let fileName = "newSavedFile"
-    
-    viewModel.toDoItems.forEach { item in
-      fileCache.addTask(item)
-    }
-    
-    do {
-      try fileCache.save(to: fileName)
-      print("File saved succefully!")
-    } catch {
-      print("Error. File not saved!")
-    }
-  }
 }
 
 extension ToDoListViewController: UITableViewDelegate {
-  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    100
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    let presentVC = UINavigationController(rootViewController: DetailViewController())
+    navigationController?.present(presentVC, animated: true)
   }
 }
 
@@ -100,8 +109,8 @@ extension ToDoListViewController: UITableViewDataSource {
       return UITableViewCell()
     }
     
-    let viewModel = self.viewModel.getViewModel(for: indexPath.row)
-    cell.viewModel = viewModel
+    let viewModel = viewModel.getCellViewModel(for: indexPath.row)
+    cell.configure(with: viewModel)
     
     return cell
   }
