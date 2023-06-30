@@ -18,7 +18,7 @@ final class TableViewContainer: UIView {
   weak var buttonContainerDelegate: ButtonContainerDelegate?
   
   private lazy var doneHStack = DoneHStack()
-  private lazy var toDoListTableView: UITableView = {
+  private(set) lazy var toDoListTableView: UITableView = {
     let tableView = UITableView()
     tableView.backgroundColor = .clear
     tableView.estimatedRowHeight = UITableView.automaticDimension

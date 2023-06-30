@@ -33,8 +33,6 @@ class TasksViewModel {
     }
     
     if toDoItems.count == 0 {
-//      toDoItems.append(ToDoItem(text: "Проверьте консоль Xcode", importance: .important, deadline: nil, changedAt: nil))
-//      toDoItems.append(ToDoItem(text: "Нет сохранённых задач", importance: .important, deadline: nil, changedAt: nil))
       toDoItems.append(ToDoItem(text: "Купить что-то", importance: .important, deadline: nil, isDone: true, changedAt: nil))
       toDoItems.append(ToDoItem(text: "Купить что-то", importance: .normal, deadline: nil, isDone: true, changedAt: nil))
       toDoItems.append(ToDoItem(text: "Задание", importance: .normal, deadline: Date(timeIntervalSince1970: 1686744616), changedAt: nil))
@@ -52,6 +50,23 @@ class TasksViewModel {
       toDoItems.append(ToDoItem(text: "Сделать зарядку", importance: .unimportant, deadline: nil, changedAt: nil))
       toDoItems.append(ToDoItem(text: "Купить сыр", importance: .unimportant, deadline: nil, changedAt: nil))
     }
+  }
+  
+  func saveData() {
+    do {
+      toDoItems.forEach { toDoItem in
+        fileCache.addTask(toDoItem)
+      }
+      try fileCache.save(to: fileName)
+    } catch {
+      print("Error saving data 11")
+    }
+  }
+  
+  func deleteItemFromData(at index: Int) {
+    print("deleteItemFromData: \(toDoItems[index])")
+    fileCache.removeTask(id: toDoItems[index].id)
+    print("deleteItemFromData: \(toDoItems[index])")
   }
   
   func getCellViewModel(for index: Int) -> ToDoCellViewModel {

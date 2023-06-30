@@ -127,21 +127,29 @@ extension ToDoListViewController {
   func updateToDoItem(at index: Int, toDoItem: ToDoItem) {
     viewModel.updateToDoItem(at: index, toDoItem: toDoItem)
     tableViewContainer.updateTableView()
+    viewModel.saveData()
   }
   
   func deleteToDoItem(at index: Int) {
+    viewModel.deleteItemFromData(at: index)
     viewModel.deleteToDoItem(at: index)
     tableViewContainer.updateTableView()
+    
+    viewModel.saveData()
   }
   
   func removeToDoItem(at indexPath: IndexPath) {
+    viewModel.deleteItemFromData(at: indexPath.row)
     viewModel.deleteToDoItem(at: indexPath.row)
-    self.tableViewContainer.deleteRow(at: indexPath)
+    tableViewContainer.deleteRow(at: indexPath)
+    
+    viewModel.saveData()
   }
   
   func isDoneToggle(at indexPath: IndexPath) {
     viewModel.isDoneToggle(at: indexPath.row)
     tableViewContainer.updateRow(at: indexPath)
+    viewModel.saveData()
   }
 }
 

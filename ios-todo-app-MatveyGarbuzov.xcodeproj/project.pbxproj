@@ -35,6 +35,7 @@
 		1C2271AA2A4C567E001A1CE3 /* DoneHStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2271A92A4C567E001A1CE3 /* DoneHStack.swift */; };
 		1C2271AC2A4C70A3001A1CE3 /* TableViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2271AB2A4C70A2001A1CE3 /* TableViewContainer.swift */; };
 		1C2271AE2A4E187D001A1CE3 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2271AD2A4E187D001A1CE3 /* DetailViewModel.swift */; };
+		1C2271B12A4F989C001A1CE3 /* FileCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2271B02A4F989C001A1CE3 /* FileCache.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +87,7 @@
 		1C2271A92A4C567E001A1CE3 /* DoneHStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoneHStack.swift; sourceTree = "<group>"; };
 		1C2271AB2A4C70A2001A1CE3 /* TableViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewContainer.swift; sourceTree = "<group>"; };
 		1C2271AD2A4E187D001A1CE3 /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
+		1C2271B02A4F989C001A1CE3 /* FileCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCache.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +189,7 @@
 		1C1274062A3D293200E6C952 /* ios-todo-app-MatveyGarbuzov */ = {
 			isa = PBXGroup;
 			children = (
+				1C2271AF2A4F9891001A1CE3 /* Services */,
 				1C1274392A3D294E00E6C952 /* App */,
 				1C1274382A3D294600E6C952 /* Screens */,
 				1C10CC932A40372900760713 /* Custom Views */,
@@ -261,6 +264,14 @@
 				1C10CC992A40384700760713 /* TasksViewModel.swift */,
 			);
 			path = Main;
+			sourceTree = "<group>";
+		};
+		1C2271AF2A4F9891001A1CE3 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				1C2271B02A4F989C001A1CE3 /* FileCache.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -414,6 +425,7 @@
 				1C10CC982A40378500760713 /* DetailViewController.swift in Sources */,
 				1C10CCAC2A42FB7500760713 /* CustomFonts.swift in Sources */,
 				1C10CCA42A40510600760713 /* CustomLabels.swift in Sources */,
+				1C2271B12A4F989C001A1CE3 /* FileCache.swift in Sources */,
 				1C10CCA22A404FFF00760713 /* ImportanceHorizontalStack.swift in Sources */,
 				1C1274442A3D2A7000E6C952 /* ToDoCellModel.swift in Sources */,
 				1C2271AE2A4E187D001A1CE3 /* DetailViewModel.swift in Sources */,
