@@ -31,6 +31,7 @@ final class DetailVerticalStack: UIView {
     datePicker.datePickerMode = .date
     datePicker.preferredDatePickerStyle = .inline
     datePicker.calendar.firstWeekday = 2
+    datePicker.timeZone = TimeZone.gmt
     let calendar = Calendar.current
     var components = DateComponents()
     components.day = 1
