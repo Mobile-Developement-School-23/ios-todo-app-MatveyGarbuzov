@@ -61,7 +61,21 @@ final class TableViewContainer: UIView {
   
   func updateTableView() {
     print("NOT RELOADING DATA")
-    toDoListTableView.reloadData()
+    UIView.animate(withDuration: 0.3) {
+      self.toDoListTableView.reloadData()
+    }
+  }
+  
+  func deleteRow(at index: IndexPath) {
+    toDoListTableView.beginUpdates()
+    toDoListTableView.deleteRows(at: [index], with: .fade)
+    toDoListTableView.endUpdates()
+  }
+  
+  func updateRow(at index: IndexPath) {
+    toDoListTableView.beginUpdates()
+    toDoListTableView.reloadRows(at: [index], with: .fade)
+    toDoListTableView.endUpdates()
   }
   
   private func customInit() {

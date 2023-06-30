@@ -73,6 +73,37 @@ extension ToDoListViewController: UITableViewDelegate {
     let viewModel = viewModel.getDetailViewModel(for: indexPath.row)
     presentDetailVC(with: viewModel)
   }
+  
+  func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    let removeAction = UIContextualAction(style: .destructive, title: "") { [self] (action, view, completionHandler) in
+      self.removeToDoItem(at: indexPath)
+      completionHandler(true)
+    }
+    
+    removeAction.image = UIImage(systemName: "trash.fill")
+    removeAction.backgroundColor = UIColor.aRed
+    
+    let configuration = UISwipeActionsConfiguration(actions: [removeAction])
+    configuration.performsFirstActionWithFullSwipe = true
+    
+    return configuration
+  }
+  
+  func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    let doneAction = UIContextualAction(style: .destructive, title: "") { [self] (action, view, completionHandler) in
+      print(viewModel.toDoItems[indexPath.row])
+      isDoneToggle(at: indexPath)
+      completionHandler(true)
+    }
+    
+    doneAction.image = UIImage(systemName: "checkmark.circle.fill")
+    doneAction.backgroundColor = UIColor.aGreen
+    
+    let configuration = UISwipeActionsConfiguration(actions: [doneAction])
+    configuration.performsFirstActionWithFullSwipe = true
+    
+    return configuration
+  }
 }
 
 extension ToDoListViewController: UITableViewDataSource {
@@ -101,6 +132,16 @@ extension ToDoListViewController {
   func deleteToDoItem(at index: Int) {
     viewModel.deleteToDoItem(at: index)
     tableViewContainer.updateTableView()
+  }
+  
+  func removeToDoItem(at indexPath: IndexPath) {
+    viewModel.deleteToDoItem(at: indexPath.row)
+    self.tableViewContainer.deleteRow(at: indexPath)
+  }
+  
+  func isDoneToggle(at indexPath: IndexPath) {
+    viewModel.isDoneToggle(at: indexPath.row)
+    tableViewContainer.updateRow(at: indexPath)
   }
 }
 

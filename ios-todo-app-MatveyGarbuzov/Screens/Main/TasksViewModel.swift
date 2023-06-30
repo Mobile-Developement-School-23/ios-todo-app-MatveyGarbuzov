@@ -70,6 +70,13 @@ class TasksViewModel {
     toDoItems.remove(at: index)
   }
   
+  func isDoneToggle(at index: Int) {
+    let oldItem = toDoItems[index]
+    let newItem = ToDoItem(id: oldItem.id, text: oldItem.text, importance: oldItem.importance, deadline: oldItem.deadline, isDone: !oldItem.isDone, createdAt: oldItem.createdAt, changedAt: oldItem.changedAt)
+    
+    toDoItems[index] = newItem
+  }
+  
   func addToDoItem(toDoItem: ToDoItem) {
     toDoItems.append(toDoItem)
   }
