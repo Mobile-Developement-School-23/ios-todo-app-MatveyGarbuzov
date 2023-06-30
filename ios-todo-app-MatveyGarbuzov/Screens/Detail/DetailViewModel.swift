@@ -8,8 +8,9 @@
 import Foundation
 
 class DetailViewModel {
-  private var toDoItem: ToDoItem
+  private(set) var toDoItem: ToDoItem
   
+  var index: Int
   var newText: String
   var newImportance: Importance
   var isDeadlineSet: Bool
@@ -21,9 +22,10 @@ class DetailViewModel {
     }
   }
 
-  init(toDoItem: ToDoItem) {
+  init(toDoItem: ToDoItem, index: Int) {
     self.toDoItem = toDoItem
     
+    self.index = index
     self.newText = toDoItem.text
     self.newImportance = toDoItem.importance
     self.isDeadlineSet = toDoItem.deadline != nil
@@ -61,5 +63,10 @@ extension DetailViewModel {
     } else {
       return ""
     }
+  }
+  
+  func saveItem() {
+    let newItem = ToDoItem(id: toDoItem.id, text: newText, importance: newImportance, deadline: newDeadlineDate, isDone: toDoItem.isDone, createdAt: toDoItem.createdAt, changedAt: toDoItem.changedAt)
+    toDoItem = newItem
   }
 }

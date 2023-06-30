@@ -63,6 +63,6 @@ class TasksViewModel {
   func getDetailViewModel(for index: Int) -> DetailViewModel {
     let item = toDoItems[index]
     
-    return DetailViewModel(toDoItem: item)
+    return DetailViewModel(toDoItem: item, index: index)
   }
 }

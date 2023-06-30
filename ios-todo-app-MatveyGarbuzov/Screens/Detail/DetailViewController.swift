@@ -24,6 +24,7 @@ protocol NewTextSetDelegate: AnyObject {
 
 final class DetailViewController: UIViewController {
   
+  weak var saveItemDelegate: SaveItemDelegate?
   var scrollViewBottomConstraint: Constraint?
   var viewModel: DetailViewModel?
   
@@ -94,7 +95,28 @@ final class DetailViewController: UIViewController {
   }
   
   private func saveItem() {
+//    print("SAVE STRUCT: \(viewModel?.toDoItem)")
+//    let newItem = ToDoItem()
+    guard let viewModel else { return }
+    viewModel.saveItem()
+    print(viewModel.toDoItem)
     
+    saveItemDelegate?.saveItem(at: viewModel.index, toDoItem: viewModel.toDoItem)
+  }
+  
+  func isSomethingChanged2()  {
+    guard let viewModel else { return }
+    
+    // Changing Save button status
+    viewModel.somethingChanged = viewModel.isSomethingChanged
+    
+    if viewModel.isSomethingChanged == true {
+      print(); print()
+      print("RESULT OF NEW VALUES")
+      print("TEXT: \(String(describing: viewModel.newText))")
+      print("IMPORTANCE: \(String(describing: viewModel.importanceLevel))")
+      print("DEADLINE: \(String(describing: viewModel.newDeadlineDate))")
+    }
   }
   
   private func observer() {

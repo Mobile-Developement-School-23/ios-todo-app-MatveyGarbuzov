@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol SaveItemDelegate: AnyObject {
+  func saveItem(at index: Int, toDoItem: ToDoItem)
+}
+
 class ToDoListViewController: UIViewController {
   
   private lazy var tableViewContainer = TableViewContainer()
@@ -56,7 +60,10 @@ extension ToDoListViewController {
 extension ToDoListViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let viewModel = viewModel.getDetailViewModel(for: indexPath.row)
-    let presentVC = UINavigationController(rootViewController: DetailViewController(viewModel: viewModel))
+    let detailVC = DetailViewController(viewModel: viewModel)
+    detailVC.saveItemDelegate = self
+    
+    let presentVC = UINavigationController(rootViewController: detailVC)
     navigationController?.present(presentVC, animated: true)
   }
 }
@@ -85,6 +92,13 @@ extension ToDoListViewController {
   }
 }
 
+extension ToDoListViewController: SaveItemDelegate {
+  func saveItem(at index: Int, toDoItem: ToDoItem) {
+    print("HELLO VC")
+    updateToDoItem(at: index, toDoItem: toDoItem)
+  }
+}
+
 extension ToDoListViewController: CellButtonContainerDelegate {
   func isDoneButtonPressed(at index: Int, toDoItem: ToDoItem) {
     updateToDoItem(at: index, toDoItem: toDoItem)
@@ -98,7 +112,7 @@ extension ToDoListViewController: CellButtonContainerDelegate {
 extension ToDoListViewController: ButtonContainerDelegate {
   func plusButtonPressed() {
     let toDoItem = ToDoItem(text: "", importance: .normal, deadline: nil, changedAt: nil)
-    let viewModel = DetailViewModel(toDoItem: toDoItem)
+    let viewModel = DetailViewModel(toDoItem: toDoItem, index: viewModel.toDoItems.count)
     
     let presentVC = UINavigationController(rootViewController: DetailViewController(viewModel: viewModel))
     navigationController?.present(presentVC, animated: true)
