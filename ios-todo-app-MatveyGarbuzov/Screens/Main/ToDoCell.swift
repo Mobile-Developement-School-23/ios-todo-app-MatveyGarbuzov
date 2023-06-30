@@ -104,10 +104,20 @@ final class ToDoCell: UITableViewCell {
   func configure(with viewModel: ToDoCellViewModel) {
     self.viewModel = viewModel
     
-    taskTextLabel.text = viewModel.getText
+    taskTextLabel.attributedText =  setupLabelStrike(text: viewModel.getText, isDone: viewModel.toDoItem.isDone)
     isDoneImageView.image = viewModel.getIsDoneImage
     deadlineDateLabel.text = viewModel.getDeadlineDate
     deadlineHStack.isHidden = viewModel.isDeadlineStackHidden
+  }
+  
+  private func setupLabelStrike(text: String, isDone: Bool) -> NSAttributedString {
+    var attributes = [NSAttributedString.Key : Any]()
+    if isDone == true {
+      attributes = [.foregroundColor: UIColor.aLabelTertiary, .strikethroughStyle: NSUnderlineStyle.single.rawValue] }
+    else {
+      attributes = [.foregroundColor: UIColor.aLabelPrimary, .strikethroughStyle: NSNull()]
+    }
+    return NSAttributedString(string: text, attributes: attributes)
   }
   
   private func setupConstraints() {

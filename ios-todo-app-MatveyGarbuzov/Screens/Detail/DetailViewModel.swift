@@ -8,7 +8,7 @@
 import Foundation
 
 class DetailViewModel {
-  private let toDoItem: ToDoItem
+  private var toDoItem: ToDoItem
   
   var newText: String
   var newImportance: Importance
@@ -21,7 +21,6 @@ class DetailViewModel {
     }
   }
 
-  
   init(toDoItem: ToDoItem) {
     self.toDoItem = toDoItem
     

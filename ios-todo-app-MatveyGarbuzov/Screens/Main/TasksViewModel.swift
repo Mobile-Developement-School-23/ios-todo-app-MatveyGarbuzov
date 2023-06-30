@@ -10,7 +10,7 @@ import Foundation
 class TasksViewModel {
   var toDoItems: [ToDoItem] = []
   let fileCache = FileCache()
-  let fileName = "ToDoItems"
+  let fileName = "ToDoItem"
   
   var fileURL: String {
     guard let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return "" }

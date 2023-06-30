@@ -44,8 +44,9 @@ extension ToDoCellViewModel {
   }
   
   func changeIsDoneStatus() {
-//    toDoItem.isDone.toggle()
     let newItem = ToDoItem(id: toDoItem.id, text: toDoItem.text, importance: toDoItem.importance, deadline: toDoItem.deadline, isDone: !toDoItem.isDone, createdAt: toDoItem.createdAt, changedAt: toDoItem.changedAt)
     toDoItem = newItem
   }
+  
+  
 }

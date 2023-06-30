@@ -78,10 +78,16 @@ extension ToDoListViewController: UITableViewDataSource {
   }
 }
 
-extension ToDoListViewController: CellButtonContainerDelegate {
-  func isDoneButtonPressed(at index: Int, toDoItem: ToDoItem) {
+extension ToDoListViewController {
+  func updateToDoItem(at index: Int, toDoItem: ToDoItem) {
     viewModel.toDoItems[index] = toDoItem
     tableViewContainer.updateTableView()
+  }
+}
+
+extension ToDoListViewController: CellButtonContainerDelegate {
+  func isDoneButtonPressed(at index: Int, toDoItem: ToDoItem) {
+    updateToDoItem(at: index, toDoItem: toDoItem)
   }
   
   func detailVCButtonPressed() {
