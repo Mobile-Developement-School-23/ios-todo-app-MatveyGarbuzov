@@ -18,6 +18,7 @@ protocol UpdateContainerHeightDelegate: AnyObject {
 
 final class ContainerStack: UIView {
   
+  weak var toDoItemDelegate: ToDoItemDelegate?
   weak var containerHeightDelegate: UpdateContainerHeightDelegate?
   weak var isDeadlineSetDelegate: NewDeadlineSetDelegate?
   weak var newSegmentedIndexSetDelegate: NewSegmentedIndexSetDelegate?
@@ -57,8 +58,13 @@ final class ContainerStack: UIView {
   }
   
   private func customInit() {
+    addAction()
     setupDelegates()
     setupConstraints()
+  }
+  
+  private func addAction() {
+    deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
   }
   
   private func setupDelegates() {
@@ -93,6 +99,11 @@ final class ContainerStack: UIView {
   override func layoutIfNeeded() {
     super.layoutIfNeeded()
     containerHeightDelegate?.update(with: deleteButton.frame.maxY)
+  }
+  
+  @objc func deleteButtonTapped() {
+    toDoItemDelegate?.deleteItem(at: -1)
+    print("Delete button tapped!")
   }
 }
 

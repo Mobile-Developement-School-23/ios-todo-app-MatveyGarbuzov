@@ -65,4 +65,8 @@ class TasksViewModel {
     
     return DetailViewModel(toDoItem: item, index: index)
   }
+  
+  func deleteToDoItem(at index: Int) {
+    toDoItems.remove(at: index)
+  }
 }

@@ -7,8 +7,9 @@
 
 import UIKit
 
-protocol SaveItemDelegate: AnyObject {
+protocol ToDoItemDelegate: AnyObject {
   func saveItem(at index: Int, toDoItem: ToDoItem)
+  func deleteItem(at index: Int)
 }
 
 class ToDoListViewController: UIViewController {
@@ -61,7 +62,7 @@ extension ToDoListViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let viewModel = viewModel.getDetailViewModel(for: indexPath.row)
     let detailVC = DetailViewController(viewModel: viewModel)
-    detailVC.saveItemDelegate = self
+    detailVC.toDoItemDelegate = self
     
     let presentVC = UINavigationController(rootViewController: detailVC)
     navigationController?.present(presentVC, animated: true)
@@ -90,9 +91,18 @@ extension ToDoListViewController {
     viewModel.toDoItems[index] = toDoItem
     tableViewContainer.updateTableView()
   }
+  
+  func deleteToDoItem(at index: Int) {
+    viewModel.deleteToDoItem(at: index)
+    tableViewContainer.updateTableView()
+  }
 }
 
-extension ToDoListViewController: SaveItemDelegate {
+extension ToDoListViewController: ToDoItemDelegate {
+  func deleteItem(at index: Int) {
+    deleteToDoItem(at: index)
+  }
+  
   func saveItem(at index: Int, toDoItem: ToDoItem) {
     print("HELLO VC")
     updateToDoItem(at: index, toDoItem: toDoItem)

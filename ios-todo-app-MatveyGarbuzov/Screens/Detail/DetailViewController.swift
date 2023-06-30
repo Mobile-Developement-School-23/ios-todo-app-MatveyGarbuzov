@@ -24,7 +24,7 @@ protocol NewTextSetDelegate: AnyObject {
 
 final class DetailViewController: UIViewController {
   
-  weak var saveItemDelegate: SaveItemDelegate?
+  weak var toDoItemDelegate: ToDoItemDelegate?
   var scrollViewBottomConstraint: Constraint?
   var viewModel: DetailViewModel?
   
@@ -99,7 +99,7 @@ final class DetailViewController: UIViewController {
     viewModel.saveItem()
     print(viewModel.toDoItem)
     
-    saveItemDelegate?.saveItem(at: viewModel.index, toDoItem: viewModel.toDoItem)
+    toDoItemDelegate?.saveItem(at: viewModel.index, toDoItem: viewModel.toDoItem)
   }
   
   private func observer() {
@@ -148,6 +148,7 @@ final class DetailViewController: UIViewController {
   }
   
   private func setupDelegates() {
+    container.toDoItemDelegate = self
     container.containerHeightDelegate = self
     container.isDeadlineSetDelegate = self
     container.newSegmentedIndexSetDelegate = self
@@ -211,6 +212,16 @@ final class DetailViewController: UIViewController {
     UIView.animate(withDuration: 0.5) {
       self.view.layoutIfNeeded()
     }
+  }
+}
+
+extension DetailViewController: ToDoItemDelegate {
+  func saveItem(at index: Int, toDoItem: ToDoItem) {}
+  
+  func deleteItem(at index: Int) {
+    guard let viewModel else { return }
+    toDoItemDelegate?.deleteItem(at: viewModel.index)
+    dismiss(animated: true)
   }
 }
 
