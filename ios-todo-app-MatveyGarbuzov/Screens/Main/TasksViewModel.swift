@@ -57,9 +57,7 @@ class TasksViewModel {
   func getCellViewModel(for index: Int) -> ToDoCellViewModel {
     let item = toDoItems[index]
     
-    return ToDoCellViewModel(id: item.id, text: item.text, importance: item.importance,
-                             deadline: item.deadline, isDone: item.isDone,
-                             createdAt: item.createdAt, changedAt: item.changedAt)
+    return ToDoCellViewModel(toDoItem: item, index: index)
   }
   
   func getDetailViewModel(for index: Int) -> DetailViewModel {

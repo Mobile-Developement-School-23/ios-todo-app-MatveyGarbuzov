@@ -70,11 +70,22 @@ extension ToDoListViewController: UITableViewDataSource {
     guard let cell = tableView.dequeueReusableCell(withIdentifier: ToDoCell.id, for: indexPath) as? ToDoCell else {
       return UITableViewCell()
     }
-    
     let viewModel = viewModel.getCellViewModel(for: indexPath.row)
     cell.configure(with: viewModel)
+    cell.cellButtonContainerDelegate = self
     
     return cell
+  }
+}
+
+extension ToDoListViewController: CellButtonContainerDelegate {
+  func isDoneButtonPressed(at index: Int, toDoItem: ToDoItem) {
+    viewModel.toDoItems[index] = toDoItem
+    tableViewContainer.updateTableView()
+  }
+  
+  func detailVCButtonPressed() {
+    print("VC detailVCButtonPressed")
   }
 }
 

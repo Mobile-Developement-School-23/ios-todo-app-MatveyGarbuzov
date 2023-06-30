@@ -8,18 +8,26 @@
 import UIKit
 import SnapKit
 
+protocol CellButtonContainerDelegate: AnyObject {
+  func isDoneButtonPressed(at index: Int, toDoItem: ToDoItem)
+  func detailVCButtonPressed()
+}
+
 final class ToDoCell: UITableViewCell {
   
   // MARK: - Properties
+  weak var cellButtonContainerDelegate: CellButtonContainerDelegate?
+  
   static let id = "ToDoCell"
   private var viewModel: ToDoCellViewModel?
 
   private lazy var mainContainer = UIView()
   private lazy var textContainer = UIView()
   
-  private lazy var importanceIndicator: UIImageView = {
+  private lazy var isDoneImageView: UIImageView = {
     let imageView = UIImageView()
-    
+    imageView.isUserInteractionEnabled = true
+
     return imageView
   }()
   
@@ -81,14 +89,30 @@ final class ToDoCell: UITableViewCell {
   }
   
   private func customInit() {
+    addAction()
     setupConstraints()
     backgroundColor = .clear
     selectionStyle = .none
   }
   
+  private func addAction() {
+    let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapDoneImageView))
+    isDoneImageView.addGestureRecognizer(tapGesture)
+    isDoneImageView.isUserInteractionEnabled = true
+  }
+  
+  func configure(with viewModel: ToDoCellViewModel) {
+    self.viewModel = viewModel
+    
+    taskTextLabel.text = viewModel.getText
+    isDoneImageView.image = viewModel.getIsDoneImage
+    deadlineDateLabel.text = viewModel.getDeadlineDate
+    deadlineHStack.isHidden = viewModel.isDeadlineStackHidden
+  }
+  
   private func setupConstraints() {
-    addSubview(mainContainer)
-    mainContainer.addSubview(importanceIndicator)
+    contentView.addSubview(mainContainer)
+    mainContainer.addSubview(isDoneImageView)
     mainContainer.addSubview(textVStack)
     mainContainer.addSubview(chevronImageView)
     
@@ -103,7 +127,7 @@ final class ToDoCell: UITableViewCell {
       make.height.greaterThanOrEqualTo(56)
     }
     
-    importanceIndicator.snp.makeConstraints { make in
+    isDoneImageView.snp.makeConstraints { make in
       make.centerY.equalTo(textVStack.snp.centerY)
       make.leading.equalToSuperview().inset(16)
       make.height.width.equalTo(24)
@@ -137,17 +161,11 @@ final class ToDoCell: UITableViewCell {
     }
   }
   
-  func configure(with viewModel: ToDoCellViewModel) {
-    self.viewModel = viewModel
+  @objc func didTapDoneImageView() {
+    viewModel?.changeIsDoneStatus()
     
-    taskTextLabel.text = viewModel.getText
-    importanceIndicator.image = viewModel.getImportanceImage
-    deadlineDateLabel.text = viewModel.getDeadlineDate
-    
-    deadlineHStack.isHidden = viewModel.deadline == nil
-  }
-  
-  @objc func didTapDoneButton() {
-    viewModel?.isDone.toggle()
+    guard let index = viewModel?.index else { return }
+    guard let toDoItem = viewModel?.toDoItem else { return }
+    cellButtonContainerDelegate?.isDoneButtonPressed(at: index, toDoItem: toDoItem)
   }
 }

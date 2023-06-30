@@ -59,6 +59,11 @@ final class TableViewContainer: UIView {
     fatalError("init(coder:) has not been implemented")
   }
   
+  func updateTableView() {
+    print("NOT RELOADING DATA")
+    toDoListTableView.reloadData()
+  }
+  
   private func customInit() {
     addAction()
     setupConstraints()
