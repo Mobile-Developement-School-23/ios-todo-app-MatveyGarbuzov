@@ -101,7 +101,7 @@ extension ContainerStack: NewDeadlineSetDelegate {
     isDeadlineSetDelegate?.isDeadlineSet(value)
   }
   
-  func newDeadlineDate(_ date: Date) {
+  func newDeadlineDate(_ date: Date?) {
     isDeadlineSetDelegate?.newDeadlineDate(date)
   }
 }

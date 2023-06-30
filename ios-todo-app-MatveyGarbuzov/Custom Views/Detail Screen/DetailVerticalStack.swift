@@ -32,11 +32,15 @@ final class DetailVerticalStack: UIView {
     datePicker.preferredDatePickerStyle = .inline
     datePicker.calendar.firstWeekday = 2
     let calendar = Calendar.current
-    datePicker.minimumDate = calendar.startOfDay(for: Date())
+    var components = DateComponents()
+    components.day = 1
+    let nextDay = calendar.date(byAdding: components, to: Date())
+    
+    datePicker.minimumDate = calendar.startOfDay(for: nextDay ?? Date())
     
     return datePicker
   }()
-  
+
   private lazy var spacer1: UIView = {
     let spacer = UIView()
     spacer.backgroundColor = .aSeparator
@@ -192,7 +196,9 @@ extension DetailVerticalStack: NewDeadlineSetDelegate {
     deadlineDateDelegate?.isDeadlineSet(value)
   }
   
-  func newDeadlineDate(_ date: Date) {}
+  func newDeadlineDate(_ date: Date?) {
+    deadlineDateDelegate?.newDeadlineDate(date)
+  }
 }
 
 extension DetailVerticalStack: NewSegmentedIndexSetDelegate {

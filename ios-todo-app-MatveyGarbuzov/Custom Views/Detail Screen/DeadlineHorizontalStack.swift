@@ -17,6 +17,14 @@ final class DeadlineHorizontalStack: UIView {
   weak var delegate: ToggleCalendarViewDelegate?
   weak var deadlineDateDelegate: NewDeadlineSetDelegate?
   
+  lazy private var dateFormatter: DateFormatter = {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "d MMMM yyyy"
+    dateFormatter.timeZone = TimeZone.gmt
+    
+    return dateFormatter
+  }()
+  
   lazy private var hStack: UIStackView = {
     let stack = UIStackView()
     stack.axis = .horizontal
@@ -138,10 +146,13 @@ final class DeadlineHorizontalStack: UIView {
   }
   
   @objc func switchStateChanged(_ sender: UISwitch) {
-    if sender.isOn {
+    if sender.isOn {      
+      let date = deadlineDateLabel.text?.stringToDate()
+      deadlineDateDelegate?.newDeadlineDate(date)
       deadlineDateDelegate?.isDeadlineSet(true)
       showDeadlineDate()
     } else {
+      deadlineDateDelegate?.newDeadlineDate(nil)
       delegate?.hideCalendarView()
       deadlineDateDelegate?.isDeadlineSet(false)
       hideDeadlineDate()
@@ -174,9 +185,11 @@ extension Date {
 }
 
 extension String {
-  func toDate(format: String) -> Date? {
+  func stringToDate() -> Date? {
     let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = self
+    dateFormatter.dateFormat = "d MMMM yyyy"
+    dateFormatter.timeZone = TimeZone.gmt
+
     return dateFormatter.date(from: self)
   }
 }

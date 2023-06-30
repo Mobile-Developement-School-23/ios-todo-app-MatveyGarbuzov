@@ -88,7 +88,6 @@ final class ImportanceHorizontalStack: UIView {
   
   @objc func segmentedControlValueChanged(_ sender: UISegmentedControl) {
     let selectedSegmentIndex = sender.selectedSegmentIndex
-    print("Selected segment index: \(selectedSegmentIndex)")
     newSegmentedIndexSetDelegate?.setNewIndex(selectedSegmentIndex)
   }
 }

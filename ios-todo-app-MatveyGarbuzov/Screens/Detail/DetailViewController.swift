@@ -10,7 +10,7 @@ import SnapKit
 
 protocol NewDeadlineSetDelegate: AnyObject {
   func isDeadlineSet(_ value: Bool)
-  func newDeadlineDate(_ date: Date)
+  func newDeadlineDate(_ date: Date?)
 }
 
 protocol NewSegmentedIndexSetDelegate: AnyObject {
@@ -35,7 +35,7 @@ final class DetailViewController: UIViewController {
     
     return scrollView
   }()
-
+  
   private lazy var container = ContainerStack()
   
   init(viewModel: DetailViewModel) {
@@ -111,19 +111,34 @@ final class DetailViewController: UIViewController {
       name: UIResponder.keyboardWillHideNotification,
       object: nil
     )
+    
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(updateButtonColor),
+      name: NSNotification.Name("somethingChanged"),
+      object: nil
+    )
+  }
+  
+  @objc func updateButtonColor() {
+    navigationItem.rightBarButtonItem?.tintColor = viewModel?.somethingChanged ?? false ? .aBlue : .aLabelTertiary
   }
   
   private func setup() {
     setupDelegates()
     
-    
     view.backgroundColor = UIColor.aBackPrimary
     title = "Дело"
     
+    setupNavBar()
+  }
+  
+  private func setupNavBar() {
     let cancelButton = UIBarButtonItem(title: "Отменить", style: .plain, target: self, action: #selector(cancelButtonPressed))
     navigationItem.leftBarButtonItem = cancelButton
     
     let saveButton = UIBarButtonItem(title: "Сохранить", style: .plain, target: self, action: #selector(saveButtonPressed))
+    saveButton.tintColor = .aLabelTertiary
     navigationItem.rightBarButtonItem = saveButton
   }
   
@@ -205,25 +220,53 @@ extension DetailViewController: UpdateContainerHeightDelegate {
   }
 }
 
+extension DetailViewController {
+  func isSomethingChanged()  {
+    guard let viewModel else { return }
+    
+    // Changing Save button status
+    viewModel.somethingChanged = viewModel.isSomethingChanged
+    
+    if viewModel.isSomethingChanged == true {
+      print(); print()
+      print("RESULT OF NEW VALUES")
+      print("TEXT: \(String(describing: viewModel.newText))")
+      print("IMPORTANCE: \(String(describing: viewModel.importanceLevel))")
+      print("DEADLINE: \(String(describing: viewModel.newDeadlineDate))")
+    }
+  }
+}
+
 extension DetailViewController: NewDeadlineSetDelegate {
   func isDeadlineSet(_ value: Bool) {
-      print("UPDATE ViewModel with deadline: \(value)")
+    viewModel?.isDeadlineSet = value
+    isSomethingChanged()
   }
   
-  func newDeadlineDate(_ date: Date) {
-    print("UPDATE ViewModel with deadline DATE: \(date)")
+  func newDeadlineDate(_ date: Date?) {
+    viewModel?.newDeadlineDate = date
+    isSomethingChanged()
   }
 }
 
 extension DetailViewController: NewSegmentedIndexSetDelegate {
   func setNewIndex(_ value: Int) {
-    print("UPDATE ViewModel with segmented index: \(value)")
+    switch value {
+    case 0:
+      viewModel?.newImportance = .unimportant
+    case 2:
+      viewModel?.newImportance = .important
+    default:
+      viewModel?.newImportance = .normal
+    }
+    
+    isSomethingChanged()
   }
 }
 
 extension DetailViewController: NewTextSetDelegate {
   func setNewText(_ value: String) {
-    print("UPDATE ViewModel with text: \(value)")
+    viewModel?.newText = value
+    isSomethingChanged()
   }
 }
-

@@ -66,17 +66,16 @@ final class CustomTextView : UITextView {
 
 extension CustomTextView : UITextViewDelegate {
   func textViewDidChange(_ textView: UITextView) {
+    newTextSetDelegate?.setNewText(textView.text)
     placeholderLabel.isHidden = !textView.text.isEmpty
   }
   
   func textViewDidEndEditing(_ textView: UITextView) {
-    newTextSetDelegate?.setNewText(textView.text)
     placeholderLabel.isHidden = !textView.text.isEmpty
     keyboardDelegate?.hide()
   }
   
   func textViewDidBeginEditing(_ textView: UITextView) {
-    newTextSetDelegate?.setNewText(textView.text)
     placeholderLabel.isHidden = !textView.text.isEmpty
     keyboardDelegate?.show()
   }

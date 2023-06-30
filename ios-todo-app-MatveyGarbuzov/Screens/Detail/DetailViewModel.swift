@@ -7,26 +7,40 @@
 
 import Foundation
 
-/*
- let id: String
- let text: String
- let importance: Importance
- let deadline: Date?
- var isDone: Bool
- let createdAt: Date
- let changedAt: Date?
- 
- */
-
 class DetailViewModel {
   private let toDoItem: ToDoItem
   
+  var newText: String
+  var newImportance: Importance
+  var isDeadlineSet: Bool
+  var newDeadlineDate: Date?
+  
+  var somethingChanged: Bool = false {
+    didSet {
+      NotificationCenter.default.post(name: NSNotification.Name("somethingChanged"), object: nil)
+    }
+  }
+
+  
   init(toDoItem: ToDoItem) {
     self.toDoItem = toDoItem
+    
+    self.newText = toDoItem.text
+    self.newImportance = toDoItem.importance
+    self.isDeadlineSet = toDoItem.deadline != nil
+    self.newDeadlineDate = toDoItem.deadline
   }
 }
 
 extension DetailViewModel {
+  var isSomethingChanged: Bool {
+    if (toDoItem.text != newText) || (toDoItem.importance != newImportance) || (toDoItem.deadline != newDeadlineDate) || (isDeadlineSet){
+      return true
+    }
+
+    return false
+  }
+    
   var text: String {
     return toDoItem.text
   }
@@ -46,7 +60,7 @@ extension DetailViewModel {
     if let date = toDoItem.deadline {
       return date.toFormattedString()
     } else {
-      return ""//Date().nextDayInString()
+      return ""
     }
   }
 }
