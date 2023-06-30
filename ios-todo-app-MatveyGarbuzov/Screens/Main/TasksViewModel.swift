@@ -62,4 +62,9 @@ class TasksViewModel {
                              createdAt: item.createdAt, changedAt: item.changedAt)
   }
   
+  func getDetailViewModel(for index: Int) -> DetailViewModel {
+    let item = toDoItems[index]
+    
+    return DetailViewModel(toDoItem: item)
+  }
 }

@@ -55,7 +55,8 @@ extension ToDoListViewController {
 
 extension ToDoListViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    let presentVC = UINavigationController(rootViewController: DetailViewController())
+    let viewModel = viewModel.getDetailViewModel(for: indexPath.row)
+    let presentVC = UINavigationController(rootViewController: DetailViewController(viewModel: viewModel))
     navigationController?.present(presentVC, animated: true)
   }
 }
@@ -79,7 +80,10 @@ extension ToDoListViewController: UITableViewDataSource {
 
 extension ToDoListViewController: ButtonContainerDelegate {
   func plusButtonPressed() {
-    let presentVC = UINavigationController(rootViewController: DetailViewController())
+    let toDoItem = ToDoItem(text: "", importance: .normal, deadline: nil, changedAt: nil)
+    let viewModel = DetailViewModel(toDoItem: toDoItem)
+    
+    let presentVC = UINavigationController(rootViewController: DetailViewController(viewModel: viewModel))
     navigationController?.present(presentVC, animated: true)
   }
 }

@@ -8,13 +8,24 @@
 import UIKit
 import SnapKit
 
+protocol NewDeadlineSetDelegate: AnyObject {
+  func isDeadlineSet(_ value: Bool)
+  func newDeadlineDate(_ date: Date)
+}
+
+protocol NewSegmentedIndexSetDelegate: AnyObject {
+  func setNewIndex(_ value: Int)
+}
+
+protocol NewTextSetDelegate: AnyObject {
+  func setNewText(_ value: String)
+}
+
+
 final class DetailViewController: UIViewController {
   
-  let fileCache = FileCache()
-  let fileName = "ToDoItem"
-  
   var scrollViewBottomConstraint: Constraint?
-  var toDoItem = ToDoItem(text: "Файл не был обнаружен, создан новый", importance: .normal, deadline: nil, changedAt: nil)
+  var viewModel: DetailViewModel?
   
   lazy private var scrollView: UIScrollView = {
     let scrollView = UIScrollView()
@@ -26,6 +37,16 @@ final class DetailViewController: UIViewController {
   }()
 
   private lazy var container = ContainerStack()
+  
+  init(viewModel: DetailViewModel) {
+    self.viewModel = viewModel
+    
+    super.init(nibName: nil, bundle: nil)
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -61,67 +82,19 @@ final class DetailViewController: UIViewController {
   }
   
   private func loadToDoItem() {
-    do {
-      try fileCache.load(from: fileName)
-      print("ToDoItem from \(fileName) loaded succefully!")
-      toDoItem = fileCache.itemsDict.values.first ?? ToDoItem(
-                                                        text: "1234",
-                                                        importance: .normal,
-                                                        deadline: nil,
-                                                        changedAt: nil)
-    } catch {
-      print("No such file as \(fileName).json!")
-      print("Creating \(fileName) file")
-      
-      do {
-        fileCache.addTask(toDoItem)
-        try fileCache.save(to: fileName)
-      } catch {
-        print("Error with saving")
-      }
-    }
     
-    print("Loaded: \(toDoItem.text), \(toDoItem.importance), \(String(describing: toDoItem.deadline))")
-    print()
-    print()
-    print()
   }
   
   private func setValues() {
-    self.container.setValues(text: toDoItem.text, importance: toDoItem.importance, deadline: toDoItem.deadline)
+    container.setValues(
+      text: viewModel?.text ?? "",
+      importanceIndex: viewModel?.importanceLevel ?? 0,
+      deadlineDate: viewModel?.deadlineDate ?? Date().nextDayInString()
+    )
   }
   
   private func saveItem() {
-    print()
-    print()
-    print()
-    print("BEFORE: ",toDoItem)
-    print()
-    print()
-    print()
-    // Убираем старый ToDoItem
-    fileCache.removeTask(id: toDoItem.id)
     
-    // Обновляем с новыми значениями
-    let text = container.getText()
-    let importance = container.getImportance()
-    let deadline = container.getDeadline()
-    toDoItem = ToDoItem(text: text, importance: importance, deadline: deadline, changedAt: Date())
-    
-    print("AFTER: ",toDoItem)
-    print()
-    print()
-    print()
-    
-    // Загружаем в FileCache
-    do {
-      fileCache.addTask(toDoItem)
-      
-      try fileCache.save(to: fileName)
-      print("Successfully saved \(toDoItem)")
-    } catch {
-      print("Error with saving")
-    }
   }
   
   private func observer() {
@@ -141,7 +114,8 @@ final class DetailViewController: UIViewController {
   }
   
   private func setup() {
-    container.containerHeightDelegate = self
+    setupDelegates()
+    
     
     view.backgroundColor = UIColor.aBackPrimary
     title = "Дело"
@@ -151,6 +125,13 @@ final class DetailViewController: UIViewController {
     
     let saveButton = UIBarButtonItem(title: "Сохранить", style: .plain, target: self, action: #selector(saveButtonPressed))
     navigationItem.rightBarButtonItem = saveButton
+  }
+  
+  private func setupDelegates() {
+    container.containerHeightDelegate = self
+    container.isDeadlineSetDelegate = self
+    container.newSegmentedIndexSetDelegate = self
+    container.newTextSetDelegate = self
   }
   
   private func setupConstraints() {
@@ -221,6 +202,28 @@ extension DetailViewController: UpdateContainerHeightDelegate {
       make.width.equalTo(view.safeAreaLayoutGuide)
       make.height.equalTo(height)
     }
+  }
+}
+
+extension DetailViewController: NewDeadlineSetDelegate {
+  func isDeadlineSet(_ value: Bool) {
+      print("UPDATE ViewModel with deadline: \(value)")
+  }
+  
+  func newDeadlineDate(_ date: Date) {
+    print("UPDATE ViewModel with deadline DATE: \(date)")
+  }
+}
+
+extension DetailViewController: NewSegmentedIndexSetDelegate {
+  func setNewIndex(_ value: Int) {
+    print("UPDATE ViewModel with segmented index: \(value)")
+  }
+}
+
+extension DetailViewController: NewTextSetDelegate {
+  func setNewText(_ value: String) {
+    print("UPDATE ViewModel with text: \(value)")
   }
 }
 

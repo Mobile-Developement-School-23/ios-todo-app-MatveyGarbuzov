@@ -62,7 +62,6 @@ final class TableViewContainer: UIView {
   private func customInit() {
     addAction()
     setupConstraints()
-    layoutIfNeeded()
   }
   
   private func addAction() {

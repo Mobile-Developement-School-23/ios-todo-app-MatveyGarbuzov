@@ -7,13 +7,10 @@
 
 import UIKit
 
-protocol DetailVStackDelegate: AnyObject {
-    func didReceiveNewValue(_ value: Date)
-}
-
 final class DetailVerticalStack: UIView {
-  
-  weak var delegate: DetailVStackDelegate?
+
+  weak var deadlineDateDelegate: NewDeadlineSetDelegate?
+  weak var newSegmentedIndexSetDelegate: NewSegmentedIndexSetDelegate?
   
   var isCalendarHidden = true
 
@@ -63,20 +60,12 @@ final class DetailVerticalStack: UIView {
     fatalError("init(coder:) has not been implemented")
   }
   
-  func setImportance(with importance: Importance) {
-    importanceHStack.setImportance(importance)
+  func setImportance(with importanceIndex: Int) {
+    importanceHStack.setImportance(importanceIndex)
   }
   
-  func setDeadline(with date: Date?) {
-    deadlineHStack.setDeadline(date)
-  }
-  
-  func getImportance() -> Importance {
-    importanceHStack.getImportance()
-  }
-  
-  func getDeadline() -> Date? {
-    deadlineHStack.getDeadline()
+  func setDeadline(with deadlineDate: String) {
+    deadlineHStack.setDeadline(deadlineDate)
   }
   
   private func customInit() {
@@ -122,8 +111,13 @@ final class DetailVerticalStack: UIView {
   private func setup() {
     backgroundColor = .aBackSecondary
     layer.cornerRadius = 15
-    
+    setupDelegates()
+  }
+  
+  private func setupDelegates() {
     deadlineHStack.delegate = self
+    deadlineHStack.deadlineDateDelegate = self
+    importanceHStack.newSegmentedIndexSetDelegate = self
   }
   
   private func addActions() {
@@ -138,27 +132,25 @@ final class DetailVerticalStack: UIView {
     mainVStack.addArrangedSubview(datePickerView)
   }
   
+  private func updateLabel(with value: String) {
+    deadlineHStack.setLabel(with: value)
+  }
+  
   @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
-    delegate?.didReceiveNewValue(sender.date)
-    
-    // Обрабатываем выбранную дату
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "dd MMMM yyyy"
-    let selectedDate = dateFormatter.string(from: sender.date)
-    print("Выбранная дата: \(selectedDate)")
-    print("--Выбранная дата: \(sender.date)")
+    let date = sender.date
+    deadlineDateDelegate?.newDeadlineDate(date)
+    updateLabel(with: date.toFormattedString())
   }
 }
 
-extension DetailVerticalStack: ToggleDatePickerDelegate {
-  
-  func hideDatePicker() {
+extension DetailVerticalStack: ToggleCalendarViewDelegate {
+  func hideCalendarView() {
     isCalendarHidden = true
     hideCalendar()
     animateChanging()
   }
   
-  func toggleDatePicker() {
+  func toggleCalendarView() {
     isCalendarHidden.toggle()
 
     isCalendarHidden ? hideCalendar() : showCalendar()
@@ -192,5 +184,19 @@ extension DetailVerticalStack: ToggleDatePickerDelegate {
     UIView.animate(withDuration: 0.3) {
       self.superview?.layoutIfNeeded()
     }
+  }
+}
+
+extension DetailVerticalStack: NewDeadlineSetDelegate {
+  func isDeadlineSet(_ value: Bool) {
+    deadlineDateDelegate?.isDeadlineSet(value)
+  }
+  
+  func newDeadlineDate(_ date: Date) {}
+}
+
+extension DetailVerticalStack: NewSegmentedIndexSetDelegate {
+  func setNewIndex(_ value: Int) {
+    newSegmentedIndexSetDelegate?.setNewIndex(value)
   }
 }

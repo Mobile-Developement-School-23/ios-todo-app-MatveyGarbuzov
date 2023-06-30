@@ -7,14 +7,15 @@
 
 import UIKit
 
-protocol ToggleDatePickerDelegate: AnyObject {
-  func toggleDatePicker()
-  func hideDatePicker()
+protocol ToggleCalendarViewDelegate: AnyObject {
+  func toggleCalendarView()
+  func hideCalendarView()
 }
 
 final class DeadlineHorizontalStack: UIView {
   
-  weak var delegate: ToggleDatePickerDelegate?
+  weak var delegate: ToggleCalendarViewDelegate?
+  weak var deadlineDateDelegate: NewDeadlineSetDelegate?
   
   lazy private var hStack: UIStackView = {
     let stack = UIStackView()
@@ -60,12 +61,18 @@ final class DeadlineHorizontalStack: UIView {
     fatalError("init(coder:) has not been implemented")
   }
   
-  func setDeadline(_ date: Date?) {
-    deadlineDateLabel.text = date?.toFormattedString() ?? Date().nextDayInString()
+  func setDeadline(_ deadlineDate: String) {
+    deadlineDateLabel.text = deadlineDate
+    if deadlineDateLabel.text != "" {
+      deadlineSwitch.isOn = true
+      switchStateChanged(deadlineSwitch)
+    } else {
+      deadlineDateLabel.text = Date().nextDayInString()
+    }
   }
-  
-  func getDeadline() -> Date? {
-    deadlineLabel.text?.toDate(format: "d MMMM yyyy")
+
+  func setLabel(with value: String) {
+    deadlineDateLabel.text = value
   }
   
   private func customInit() {
@@ -132,16 +139,18 @@ final class DeadlineHorizontalStack: UIView {
   
   @objc func switchStateChanged(_ sender: UISwitch) {
     if sender.isOn {
+      deadlineDateDelegate?.isDeadlineSet(true)
       showDeadlineDate()
     } else {
-      delegate?.hideDatePicker()
+      delegate?.hideCalendarView()
+      deadlineDateDelegate?.isDeadlineSet(false)
       hideDeadlineDate()
     }
     animateChanging()
   }
   
   @objc func dateLabelTapped() {
-    delegate?.toggleDatePicker()
+    delegate?.toggleCalendarView()
   }
 }
 

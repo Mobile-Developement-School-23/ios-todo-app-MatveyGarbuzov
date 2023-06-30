@@ -19,6 +19,9 @@ protocol UpdateContainerHeightDelegate: AnyObject {
 final class ContainerStack: UIView {
   
   weak var containerHeightDelegate: UpdateContainerHeightDelegate?
+  weak var isDeadlineSetDelegate: NewDeadlineSetDelegate?
+  weak var newSegmentedIndexSetDelegate: NewSegmentedIndexSetDelegate?
+  weak var newTextSetDelegate: NewTextSetDelegate?
     
   private let textView = CustomTextView()
   private let vStack = DetailVerticalStack()
@@ -47,25 +50,24 @@ final class ContainerStack: UIView {
     fatalError("init(coder:) has not been implemented")
   }
   
-  func setValues(text: String, importance: Importance, deadline: Date?) {
-    self.textView.setText(with: text)
-    self.vStack.setImportance(with: importance)
-    self.vStack.setDeadline(with: deadline)
+  func setValues(text: String, importanceIndex: Int, deadlineDate: String) {
+    textView.setText(with: text)
+    vStack.setImportance(with: importanceIndex)
+    vStack.setDeadline(with: deadlineDate)
   }
   
-  func getText() -> String {
-    self.textView.getText()
+  private func customInit() {
+    setupDelegates()
+    setupConstraints()
   }
   
-  func getImportance() -> Importance {
-    self.vStack.getImportance()
+  private func setupDelegates() {
+    vStack.deadlineDateDelegate = self
+    vStack.newSegmentedIndexSetDelegate = self
+    textView.newTextSetDelegate = self
   }
   
-  func getDeadline() -> Date? {
-    self.vStack.getDeadline()
-  }
-  
-  func customInit() {
+  private func setupConstraints() {
     addSubview(textView)
     addSubview(vStack)
     addSubview(deleteButton)
@@ -91,5 +93,27 @@ final class ContainerStack: UIView {
   override func layoutIfNeeded() {
     super.layoutIfNeeded()
     containerHeightDelegate?.update(with: deleteButton.frame.maxY)
+  }
+}
+
+extension ContainerStack: NewDeadlineSetDelegate {
+  func isDeadlineSet(_ value: Bool) {
+    isDeadlineSetDelegate?.isDeadlineSet(value)
+  }
+  
+  func newDeadlineDate(_ date: Date) {
+    isDeadlineSetDelegate?.newDeadlineDate(date)
+  }
+}
+
+extension ContainerStack: NewSegmentedIndexSetDelegate {
+  func setNewIndex(_ value: Int) {
+    newSegmentedIndexSetDelegate?.setNewIndex(value)
+  }
+}
+
+extension ContainerStack: NewTextSetDelegate {
+  func setNewText(_ value: String) {
+    newTextSetDelegate?.setNewText(value)
   }
 }

@@ -38,6 +38,4 @@ extension ToDoCellViewModel {
   var getDeadlineDate: String? {
     return deadline?.toFormattedString()
   }
-  
-  
 }
