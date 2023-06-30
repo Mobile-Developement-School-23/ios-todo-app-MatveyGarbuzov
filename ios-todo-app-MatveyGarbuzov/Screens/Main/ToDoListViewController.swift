@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ToDoItemDelegate: AnyObject {
-  func saveItem(at index: Int, toDoItem: ToDoItem)
+  func updateItem(at index: Int, toDoItem: ToDoItem)
   func deleteItem(at index: Int)
 }
 
@@ -43,6 +43,16 @@ class ToDoListViewController: UIViewController {
 }
 
 extension ToDoListViewController {
+  private func presentDetailVC(with viewModel: DetailViewModel) {
+    let detailVC = DetailViewController(viewModel: viewModel)
+    detailVC.toDoItemDelegate = self
+    
+    let presentVC = UINavigationController(rootViewController: detailVC)
+    navigationController?.present(presentVC, animated: true)
+  }
+}
+
+extension ToDoListViewController {
   private func setupNavBar() {
     view.backgroundColor = .aBackIOSPrimary
     title = "Мои дела"
@@ -61,11 +71,7 @@ extension ToDoListViewController {
 extension ToDoListViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let viewModel = viewModel.getDetailViewModel(for: indexPath.row)
-    let detailVC = DetailViewController(viewModel: viewModel)
-    detailVC.toDoItemDelegate = self
-    
-    let presentVC = UINavigationController(rootViewController: detailVC)
-    navigationController?.present(presentVC, animated: true)
+    presentDetailVC(with: viewModel)
   }
 }
 
@@ -88,7 +94,7 @@ extension ToDoListViewController: UITableViewDataSource {
 
 extension ToDoListViewController {
   func updateToDoItem(at index: Int, toDoItem: ToDoItem) {
-    viewModel.toDoItems[index] = toDoItem
+    viewModel.updateToDoItem(at: index, toDoItem: toDoItem)
     tableViewContainer.updateTableView()
   }
   
@@ -103,8 +109,7 @@ extension ToDoListViewController: ToDoItemDelegate {
     deleteToDoItem(at: index)
   }
   
-  func saveItem(at index: Int, toDoItem: ToDoItem) {
-    print("HELLO VC")
+  func updateItem(at index: Int, toDoItem: ToDoItem) {
     updateToDoItem(at: index, toDoItem: toDoItem)
   }
 }
@@ -124,8 +129,6 @@ extension ToDoListViewController: ButtonContainerDelegate {
     let toDoItem = ToDoItem(text: "", importance: .normal, deadline: nil, changedAt: nil)
     let viewModel = DetailViewModel(toDoItem: toDoItem, index: viewModel.toDoItems.count)
     
-    let presentVC = UINavigationController(rootViewController: DetailViewController(viewModel: viewModel))
-    navigationController?.present(presentVC, animated: true)
+    presentDetailVC(with: viewModel)
   }
 }
-

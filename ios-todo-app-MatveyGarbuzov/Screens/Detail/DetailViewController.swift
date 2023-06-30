@@ -52,8 +52,6 @@ final class DetailViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    loadToDoItem()
-    
     setup()
     setupConstraints()
     setupKeyboard()
@@ -82,10 +80,6 @@ final class DetailViewController: UIViewController {
     )
   }
   
-  private func loadToDoItem() {
-    
-  }
-  
   private func setValues() {
     container.setValues(
       text: viewModel?.text ?? "",
@@ -97,9 +91,7 @@ final class DetailViewController: UIViewController {
   private func saveItem() {
     guard let viewModel else { return }
     viewModel.saveItem()
-    print(viewModel.toDoItem)
-    
-    toDoItemDelegate?.saveItem(at: viewModel.index, toDoItem: viewModel.toDoItem)
+    toDoItemDelegate?.updateItem(at: viewModel.index, toDoItem: viewModel.toDoItem)
   }
   
   private func observer() {
@@ -216,7 +208,7 @@ final class DetailViewController: UIViewController {
 }
 
 extension DetailViewController: ToDoItemDelegate {
-  func saveItem(at index: Int, toDoItem: ToDoItem) {}
+  func updateItem(at index: Int, toDoItem: ToDoItem) {}
   
   func deleteItem(at index: Int) {
     guard let viewModel else { return }

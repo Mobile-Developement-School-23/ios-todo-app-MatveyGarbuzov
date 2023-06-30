@@ -69,4 +69,16 @@ class TasksViewModel {
   func deleteToDoItem(at index: Int) {
     toDoItems.remove(at: index)
   }
+  
+  func addToDoItem(toDoItem: ToDoItem) {
+    toDoItems.append(toDoItem)
+  }
+  
+  func updateToDoItem(at index: Int, toDoItem: ToDoItem) {
+    if index == toDoItems.count {
+      addToDoItem(toDoItem: toDoItem)
+    } else {
+      toDoItems[index] = toDoItem
+    }
+  }
 }
