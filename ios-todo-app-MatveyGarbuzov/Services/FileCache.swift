@@ -7,8 +7,16 @@
 
 import Foundation
 
+import CocoaLumberjackSwift
+
 class FileCache {
   private(set) var itemsDict = [String: ToDoItem]()
+  private let logger: DDLog = {
+    let logger = DDLog()
+    DDLog.add(DDOSLogger.sharedInstance)
+    return logger
+  }()
+
   
   func addTask(_ item: ToDoItem) {
     itemsDict[item.id] = item
@@ -22,7 +30,7 @@ class FileCache {
     // Creating destination directory URL
     let fm = FileManager.default
     guard let directoryURL = fm.urls(for: .documentDirectory, in: .userDomainMask).first else {
-      print("Error saving file")
+      DDLogError("Error saving file")
       return
     }
     
@@ -34,16 +42,16 @@ class FileCache {
       let serializedItems = itemsDict.map { _, item in item.json }
       let data = try JSONSerialization.data(withJSONObject: serializedItems, options: [])
       try data.write(to: fileURL)
-      print("Saving file at: \(fileURL.absoluteURL)")
+      DDLogInfo("Savasfkljing file at: \(fileURL.absoluteURL)")
     } catch {
-      print(error.localizedDescription)
+      DDLogError(error.localizedDescription)
     }
   }
   
   func load(from file: String) throws {
     let fm = FileManager.default
     guard let directoryURL = fm.urls(for: .documentDirectory, in: .userDomainMask).first else {
-      print("Error reading file")
+      DDLogError("Error reading file")
       return
     }
     
@@ -53,9 +61,10 @@ class FileCache {
     let savedData = try Data(contentsOf: fileURL)
     let json = try JSONSerialization.jsonObject(with: savedData, options: [])
     guard let dict = json as? [Any] else {
-      print("Error with parsing data")
+      DDLogError("Error with parsing data")
       return
     }
+    DDLogInfo("SAVED")
     let items = dict.compactMap { ToDoItem.parse(json: $0) }
     
     itemsDict = items.reduce(into: [:]) { res, item in
