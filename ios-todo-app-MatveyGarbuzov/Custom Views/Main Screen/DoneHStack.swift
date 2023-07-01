@@ -7,7 +7,14 @@
 
 import UIKit
 
+protocol ShowDoneTasksDelegate: AnyObject {
+  func show()
+}
+
 final class DoneHStack: UIView {
+  
+  weak var showDoneTasksDelegate: ShowDoneTasksDelegate?
+  private var isShowDoneTasks = false
   
   private lazy var hStack: UIStackView = {
     let stack = UIStackView()
@@ -42,8 +49,8 @@ final class DoneHStack: UIView {
     fatalError("init(coder:) has not been implemented")
   }
   
-  func updateTitle(with title: String) {
-    showButton.setTitle(title, for: .normal)
+  func updateTitle(with value: Int) {
+    doneLabel.text = "Выполнено — \(value)"
   }
   
   private func customInit() {
@@ -68,7 +75,10 @@ final class DoneHStack: UIView {
   }
   
   @objc func tapped() {
-    print("Show button tapped")
+    isShowDoneTasks.toggle()
+    let attributes = AttributeContainer([NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 15), .kern : -0.24])
+    showButton.configuration?.attributedTitle = AttributedString(isShowDoneTasks ? "Скрыть" : "Показать", attributes: attributes)
+    showDoneTasksDelegate?.show()
   }
   
 }

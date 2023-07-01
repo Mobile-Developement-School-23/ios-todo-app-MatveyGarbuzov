@@ -27,10 +27,26 @@ class ToDoListViewController: UIViewController {
     setupDelegates()
   }
   
+  private func addObservers() {
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(doneTasksCountChanged(_:)),
+      name: NSNotification.Name("doneTasksCountChanged"),
+      object: nil
+    )
+
+  }
+  
+  @objc func doneTasksCountChanged(_ notification: NSNotification) {
+    tableViewContainer.updateHStack(with: viewModel.doneTasksCount)
+  }
+
+  
   private func setupDelegates() {
     tableViewContainer.buttonContainerDelegate = self
     tableViewContainer.delegate = self
     tableViewContainer.dataSource = self
+    tableViewContainer.showDoneTasksDelegate = self
   }
   
   private func setupConstraints() {
@@ -39,6 +55,13 @@ class ToDoListViewController: UIViewController {
     tableViewContainer.snp.makeConstraints { make in
       make.edges.equalToSuperview()
     }
+  }
+}
+
+extension ToDoListViewController: ShowDoneTasksDelegate {
+  func show() {
+    viewModel.toggleDoneTasks()
+    tableViewContainer.updateHStack(with: viewModel.doneTasksCount)
   }
 }
 

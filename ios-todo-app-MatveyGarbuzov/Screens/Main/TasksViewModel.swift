@@ -9,9 +9,64 @@ import Foundation
 
 class TasksViewModel {
   var toDoItems: [ToDoItem] = []
+  var notDoneToDoItems: [ToDoItem] = []
+  var isDoneTasksHidden = false
+  var doneTasksCount = 0 {
+    didSet {
+      NotificationCenter.default.post(name: NSNotification.Name("doneTasksCountChanged"), object: nil)
+    }
+  }
+  
   let fileCache = FileCache()
   let fileName = "ToDoItem"
   
+  func toggleDoneTasks() {
+    print("TOGGLE DONE")
+    isDoneTasksHidden.toggle()
+    loadData()
+  }
+  
+  func getCellViewModel(for index: Int) -> ToDoCellViewModel {
+    let item = toDoItems[index]
+    
+    return ToDoCellViewModel(toDoItem: item, index: index)
+  }
+  
+  func getDetailViewModel(for index: Int) -> DetailViewModel {
+    let item = toDoItems[index]
+    
+    return DetailViewModel(toDoItem: item, index: index)
+  }
+  
+  func deleteItemFromData(at index: Int) {
+    fileCache.removeTask(id: toDoItems[index].id)
+  }
+  
+  func deleteToDoItem(at index: Int) {
+    toDoItems.remove(at: index)
+  }
+  
+  func isDoneToggle(at index: Int) {
+    let oldItem = toDoItems[index]
+    let newItem = ToDoItem(id: oldItem.id, text: oldItem.text, importance: oldItem.importance, deadline: oldItem.deadline, isDone: !oldItem.isDone, createdAt: oldItem.createdAt, changedAt: oldItem.changedAt)
+    
+    toDoItems[index] = newItem
+  }
+  
+  func addToDoItem(toDoItem: ToDoItem) {
+    toDoItems.append(toDoItem)
+  }
+  
+  func updateToDoItem(at index: Int, toDoItem: ToDoItem) {
+    if index == toDoItems.count {
+      addToDoItem(toDoItem: toDoItem)
+    } else {
+      toDoItems[index] = toDoItem
+    }
+  }
+}
+
+extension TasksViewModel {
   var fileURL: String {
     guard let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return "" }
     let fileURL = URL(fileURLWithPath: fileName, relativeTo: directoryURL).appendingPathExtension("json")
@@ -22,9 +77,19 @@ class TasksViewModel {
   func loadData() {
     do {
       try fileCache.load(from: fileName)
+      doneTasksCount = 0
+      notDoneToDoItems = []
+      toDoItems = []
       fileCache.itemsDict.forEach { (key: String, value: ToDoItem) in
+        if value.isDone == false {
+          notDoneToDoItems.append(value)
+        } else {
+          doneTasksCount += 1
+        }
         toDoItems.append(value)
       }
+      toDoItems.sort(by: { $0.createdAt < $1.createdAt })
+      
       print("\(fileCache.itemsDict.count) ToDoItems from \(fileName) loaded succefully!")
       print(fileURL)
     } catch {
@@ -60,47 +125,6 @@ class TasksViewModel {
       try fileCache.save(to: fileName)
     } catch {
       print("Error saving data 11")
-    }
-  }
-  
-  func deleteItemFromData(at index: Int) {
-    print("deleteItemFromData: \(toDoItems[index])")
-    fileCache.removeTask(id: toDoItems[index].id)
-    print("deleteItemFromData: \(toDoItems[index])")
-  }
-  
-  func getCellViewModel(for index: Int) -> ToDoCellViewModel {
-    let item = toDoItems[index]
-    
-    return ToDoCellViewModel(toDoItem: item, index: index)
-  }
-  
-  func getDetailViewModel(for index: Int) -> DetailViewModel {
-    let item = toDoItems[index]
-    
-    return DetailViewModel(toDoItem: item, index: index)
-  }
-  
-  func deleteToDoItem(at index: Int) {
-    toDoItems.remove(at: index)
-  }
-  
-  func isDoneToggle(at index: Int) {
-    let oldItem = toDoItems[index]
-    let newItem = ToDoItem(id: oldItem.id, text: oldItem.text, importance: oldItem.importance, deadline: oldItem.deadline, isDone: !oldItem.isDone, createdAt: oldItem.createdAt, changedAt: oldItem.changedAt)
-    
-    toDoItems[index] = newItem
-  }
-  
-  func addToDoItem(toDoItem: ToDoItem) {
-    toDoItems.append(toDoItem)
-  }
-  
-  func updateToDoItem(at index: Int, toDoItem: ToDoItem) {
-    if index == toDoItems.count {
-      addToDoItem(toDoItem: toDoItem)
-    } else {
-      toDoItems[index] = toDoItem
     }
   }
 }

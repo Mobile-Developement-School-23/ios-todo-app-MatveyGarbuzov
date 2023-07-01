@@ -15,6 +15,7 @@ protocol ButtonContainerDelegate: AnyObject {
 
 final class TableViewContainer: UIView {
   
+  weak var showDoneTasksDelegate: ShowDoneTasksDelegate?
   weak var buttonContainerDelegate: ButtonContainerDelegate?
   
   private lazy var doneHStack = DoneHStack()
@@ -53,14 +54,22 @@ final class TableViewContainer: UIView {
   override init(frame: CGRect) {
     super.init(frame: frame)
     customInit()
+    setupDelegates()
   }
   
   required init(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
   
+  private func setupDelegates() {
+    doneHStack.showDoneTasksDelegate = self
+  }
+  
+  func updateHStack(with value: Int) {
+    doneHStack.updateTitle(with: value)
+  }
+  
   func updateTableView() {
-    print("NOT RELOADING DATA")
     UIView.animate(withDuration: 0.3) {
       self.toDoListTableView.reloadData()
     }
@@ -94,7 +103,7 @@ final class TableViewContainer: UIView {
     
     doneHStack.snp.makeConstraints { make in
       make.height.equalTo(20)
-      make.leading.trailing.equalToSuperview().inset(32)
+      make.leading.trailing.equalTo(safeAreaLayoutGuide).inset(32)
       make.top.equalTo(safeAreaLayoutGuide).offset(8)
     }
     
@@ -113,5 +122,11 @@ final class TableViewContainer: UIView {
   
   @objc func plusButtonPressed() {
     buttonContainerDelegate?.plusButtonPressed()
+  }
+}
+
+extension TableViewContainer: ShowDoneTasksDelegate {
+  func show() {
+    showDoneTasksDelegate?.show()
   }
 }
