@@ -8,7 +8,7 @@
 import XCTest
 @testable import ios_todo_app_MatveyGarbuzov
 
-final class ios_todo_app_MatveyGarbuzovTests: XCTestCase {
+final class IosTodoAppMatveyGarbuzovTests: XCTestCase {
   
   // MARK: Testing initializers (full or only required)
   func testToDoItemInit() {

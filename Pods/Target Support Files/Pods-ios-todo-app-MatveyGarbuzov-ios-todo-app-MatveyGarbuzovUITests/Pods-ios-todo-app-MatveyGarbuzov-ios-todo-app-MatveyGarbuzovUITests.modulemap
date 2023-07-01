@@ -1,0 +1,6 @@
+framework module Pods_ios_todo_app_MatveyGarbuzov_ios_todo_app_MatveyGarbuzovUITests {
+  umbrella header "Pods-ios-todo-app-MatveyGarbuzov-ios-todo-app-MatveyGarbuzovUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}

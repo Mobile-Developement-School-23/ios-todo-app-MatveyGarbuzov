@@ -7,15 +7,14 @@
 
 import UIKit
 
+protocol ToDoItemDelegate: AnyObject {
+  func updateItem(at index: Int, toDoItem: ToDoItem)
+  func deleteItem(at index: Int)
+}
+
 class ToDoListViewController: UIViewController {
   
-  private lazy var toDoListTableView: UITableView = {
-    let tableView = UITableView()
-    tableView.backgroundColor = .clear
-    return tableView
-  }()
-  
-  private lazy var plusButton = PlusButton()
+  private lazy var tableViewContainer = TableViewContainer()
   
   var viewModel = TasksViewModel()
   
@@ -24,69 +23,109 @@ class ToDoListViewController: UIViewController {
     
     setupNavBar()
     setupConstraints()
-    addAction()
     viewModel.loadData()
-    plusButtonPressed()
+    setupDelegates()
   }
   
-  private func setupNavBar() {
-    view.backgroundColor = .aBackIOSPrimary
-    title = "Мои дела"
-    navigationController?.navigationBar.prefersLargeTitles = true
+  private func addObservers() {
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(doneTasksCountChanged(_:)),
+      name: NSNotification.Name("doneTasksCountChanged"),
+      object: nil
+    )
+
+  }
+  
+  @objc func doneTasksCountChanged(_ notification: NSNotification) {
+    tableViewContainer.updateHStack(with: viewModel.doneTasksCount)
+  }
+
+  
+  private func setupDelegates() {
+    tableViewContainer.buttonContainerDelegate = self
+    tableViewContainer.delegate = self
+    tableViewContainer.dataSource = self
+    tableViewContainer.showDoneTasksDelegate = self
   }
   
   private func setupConstraints() {
-    view.addSubview(toDoListTableView)
-    view.addSubview(plusButton)
+    view.addSubview(tableViewContainer)
     
-    toDoListTableView.delegate = self
-    toDoListTableView.dataSource = self
-    toDoListTableView.register(ToDoCell.self, forCellReuseIdentifier: "ToDoCell")
-    
-    toDoListTableView.snp.makeConstraints { make in
-      make.top.equalTo(view.safeAreaLayoutGuide)
-      make.leading.trailing.equalToSuperview().inset(10)
-      make.bottom.equalToSuperview()
-    }
-    
-    plusButton.snp.makeConstraints { make in
-      make.width.height.equalTo(44)
-      make.centerX.equalToSuperview()
-      make.bottom.equalTo(view.safeAreaLayoutGuide)
+    tableViewContainer.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
     }
   }
-  
-  private func addAction() {
-    plusButton.addTarget(self, action: #selector(plusButtonPressed), for: .touchUpInside)
+}
+
+extension ToDoListViewController: ShowDoneTasksDelegate {
+  func show() {
+    viewModel.toggleDoneTasks()
+    tableViewContainer.updateHStack(with: viewModel.doneTasksCount)
   }
-  
-  @objc func plusButtonPressed() {
-    let presentVC = UINavigationController(rootViewController: DetailViewController())
+}
+
+extension ToDoListViewController {
+  private func presentDetailVC(with viewModel: DetailViewModel) {
+    let detailVC = DetailViewController(viewModel: viewModel)
+    detailVC.toDoItemDelegate = self
+    
+    let presentVC = UINavigationController(rootViewController: detailVC)
     navigationController?.present(presentVC, animated: true)
   }
-  
-  @objc func saveButtonPressed() throws {
-    print("Saving file with \(viewModel.toDoItems.count) ToDoItems!")
+}
+
+extension ToDoListViewController {
+  private func setupNavBar() {
+    view.backgroundColor = .aBackIOSPrimary
+    title = "Мои дела"
     
-    let fileCache = FileCache()
-    let fileName = "newSavedFile"
-    
-    viewModel.toDoItems.forEach { item in
-      fileCache.addTask(item)
-    }
-    
-    do {
-      try fileCache.save(to: fileName)
-      print("File saved succefully!")
-    } catch {
-      print("Error. File not saved!")
+    let attributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 34), .kern: 0.37]
+    navigationController?.navigationBar.largeTitleTextAttributes = attributes
+    navigationController?.navigationBar.prefersLargeTitles = true
+   
+    if var margins = navigationController?.navigationBar.layoutMargins {
+        margins.left = 32
+        navigationController?.navigationBar.layoutMargins = margins
     }
   }
 }
 
 extension ToDoListViewController: UITableViewDelegate {
-  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    100
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    let viewModel = viewModel.getDetailViewModel(for: indexPath.row)
+    presentDetailVC(with: viewModel)
+  }
+  
+  func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    let removeAction = UIContextualAction(style: .destructive, title: "") { [self] (action, view, completionHandler) in
+      self.removeToDoItem(at: indexPath)
+      completionHandler(true)
+    }
+    
+    removeAction.image = UIImage(systemName: "trash.fill")
+    removeAction.backgroundColor = UIColor.aRed
+    
+    let configuration = UISwipeActionsConfiguration(actions: [removeAction])
+    configuration.performsFirstActionWithFullSwipe = true
+    
+    return configuration
+  }
+  
+  func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    let doneAction = UIContextualAction(style: .destructive, title: "") { [self] (action, view, completionHandler) in
+      print(viewModel.toDoItems[indexPath.row])
+      isDoneToggle(at: indexPath)
+      completionHandler(true)
+    }
+    
+    doneAction.image = UIImage(systemName: "checkmark.circle.fill")
+    doneAction.backgroundColor = UIColor.aGreen
+    
+    let configuration = UISwipeActionsConfiguration(actions: [doneAction])
+    configuration.performsFirstActionWithFullSwipe = true
+    
+    return configuration
   }
 }
 
@@ -99,10 +138,69 @@ extension ToDoListViewController: UITableViewDataSource {
     guard let cell = tableView.dequeueReusableCell(withIdentifier: ToDoCell.id, for: indexPath) as? ToDoCell else {
       return UITableViewCell()
     }
-    
-    let viewModel = self.viewModel.getViewModel(for: indexPath.row)
-    cell.viewModel = viewModel
+    let viewModel = viewModel.getCellViewModel(for: indexPath.row)
+    cell.configure(with: viewModel)
+    cell.cellButtonContainerDelegate = self
     
     return cell
+  }
+}
+
+extension ToDoListViewController {
+  func updateToDoItem(at index: Int, toDoItem: ToDoItem) {
+    viewModel.updateToDoItem(at: index, toDoItem: toDoItem)
+    tableViewContainer.updateTableView()
+    viewModel.saveData()
+  }
+  
+  func deleteToDoItem(at index: Int) {
+    viewModel.deleteItemFromData(at: index)
+    viewModel.deleteToDoItem(at: index)
+    tableViewContainer.updateTableView()
+    
+    viewModel.saveData()
+  }
+  
+  func removeToDoItem(at indexPath: IndexPath) {
+    viewModel.deleteItemFromData(at: indexPath.row)
+    viewModel.deleteToDoItem(at: indexPath.row)
+    tableViewContainer.deleteRow(at: indexPath)
+    
+    viewModel.saveData()
+  }
+  
+  func isDoneToggle(at indexPath: IndexPath) {
+    viewModel.isDoneToggle(at: indexPath.row)
+    tableViewContainer.updateRow(at: indexPath)
+    viewModel.saveData()
+  }
+}
+
+extension ToDoListViewController: ToDoItemDelegate {
+  func deleteItem(at index: Int) {
+    deleteToDoItem(at: index)
+  }
+  
+  func updateItem(at index: Int, toDoItem: ToDoItem) {
+    updateToDoItem(at: index, toDoItem: toDoItem)
+  }
+}
+
+extension ToDoListViewController: CellButtonContainerDelegate {
+  func isDoneButtonPressed(at index: Int, toDoItem: ToDoItem) {
+    updateToDoItem(at: index, toDoItem: toDoItem)
+  }
+  
+  func detailVCButtonPressed() {
+    print("VC detailVCButtonPressed")
+  }
+}
+
+extension ToDoListViewController: ButtonContainerDelegate {
+  func plusButtonPressed() {
+    let toDoItem = ToDoItem(text: "", importance: .normal, deadline: nil, changedAt: nil)
+    let viewModel = DetailViewModel(toDoItem: toDoItem, index: viewModel.toDoItems.count)
+    
+    presentDetailVC(with: viewModel)
   }
 }

@@ -6,13 +6,52 @@
 //
 
 import Foundation
+import UIKit
 
-struct ToDoCellViewModel {
-  let id: String
-  let text: String
-  let importance: String
-  let deadline: Date?
-  var isDone: Bool
-  let createdAt: Date
-  let changedAt: Date?
+class ToDoCellViewModel {
+  private(set) var toDoItem: ToDoItem
+  var index: Int
+  
+  init(toDoItem: ToDoItem, index: Int) {
+    self.toDoItem = toDoItem
+    self.index = index
+  }
+}
+
+extension ToDoCellViewModel {
+  var isDeadlineStackHidden: Bool {
+    return toDoItem.deadline == nil
+  }
+  
+  var getId: String {
+    return toDoItem.id
+  }
+  
+  var getText: String {
+    return toDoItem.text
+  }
+  
+  var getIsDoneImage: UIImage? {
+    var imageName: String = "NotDone"
+    if toDoItem.importance == .important { imageName = "HighPriority" }
+    if toDoItem.isDone { imageName = "Done" }
+    
+    return UIImage(named: imageName)
+  }
+  
+  var getDeadlineDate: String? {
+    return toDoItem.deadline?.toFormattedString()
+  }
+  
+  func changeIsDoneStatus() {
+    let newItem = ToDoItem(
+      id: toDoItem.id,
+      text: toDoItem.text,
+      importance: toDoItem.importance,
+      deadline: toDoItem.deadline,
+      isDone: !toDoItem.isDone,
+      createdAt: toDoItem.createdAt,
+      changedAt: toDoItem.changedAt)
+    toDoItem = newItem
+  }
 }

@@ -16,7 +16,7 @@ extension UILabel {
     label.font = .systemFont(ofSize: 38)
     let paragraphStyle = NSMutableParagraphStyle()
     paragraphStyle.lineHeightMultiple = 1
-    label.attributedText = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.kern: 0.42, NSAttributedString.Key.paragraphStyle: paragraphStyle])
+    label.attributedText = NSMutableAttributedString(string: text, attributes: [.kern: 0.42, .paragraphStyle: paragraphStyle])
     
     return label
   }
@@ -29,7 +29,7 @@ extension UILabel {
     label.font = .systemFont(ofSize: 20)
     let paragraphStyle = NSMutableParagraphStyle()
     paragraphStyle.lineHeightMultiple = 1
-    label.attributedText = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.kern: 0.38, NSAttributedString.Key.paragraphStyle: paragraphStyle])
+    label.attributedText = NSMutableAttributedString(string: text, attributes: [.kern: 0.38, .paragraphStyle: paragraphStyle])
     
     return label
   }
@@ -42,7 +42,7 @@ extension UILabel {
     label.font = .systemFont(ofSize: 17)
     let paragraphStyle = NSMutableParagraphStyle()
     paragraphStyle.lineHeightMultiple = 1
-    label.attributedText = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.kern: -0.41, NSAttributedString.Key.paragraphStyle: paragraphStyle])
+    label.attributedText = NSMutableAttributedString(string: text, attributes: [.kern: -0.41, .paragraphStyle: paragraphStyle])
     
     return label
   }
@@ -55,7 +55,7 @@ extension UILabel {
     label.font = .systemFont(ofSize: 17)
     let paragraphStyle = NSMutableParagraphStyle()
     paragraphStyle.lineHeightMultiple = 1
-    label.attributedText = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.kern: -0.41, NSAttributedString.Key.paragraphStyle: paragraphStyle])
+    label.attributedText = NSMutableAttributedString(string: text, attributes: [.kern: -0.41, .paragraphStyle: paragraphStyle])
     
     return label
   }
@@ -68,7 +68,7 @@ extension UILabel {
     label.font = .systemFont(ofSize: 15)
     let paragraphStyle = NSMutableParagraphStyle()
     paragraphStyle.lineHeightMultiple = 1
-    label.attributedText = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.kern: -0.24, NSAttributedString.Key.paragraphStyle: paragraphStyle])
+    label.attributedText = NSMutableAttributedString(string: text, attributes: [.kern: -0.24, .paragraphStyle: paragraphStyle])
     
     return label
   }
@@ -81,7 +81,7 @@ extension UILabel {
     label.font = .systemFont(ofSize: 13)
     let paragraphStyle = NSMutableParagraphStyle()
     paragraphStyle.lineHeightMultiple = 1
-    label.attributedText = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.kern: -0.08, NSAttributedString.Key.paragraphStyle: paragraphStyle])
+    label.attributedText = NSMutableAttributedString(string: text, attributes: [.kern: -0.08, .paragraphStyle: paragraphStyle])
     
     return label
   }

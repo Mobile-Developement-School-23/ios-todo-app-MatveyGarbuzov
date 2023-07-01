@@ -9,6 +9,8 @@ import UIKit
 
 final class ImportanceHorizontalStack: UIView {
   
+  weak var newSegmentedIndexSetDelegate: NewSegmentedIndexSetDelegate?
+  
   lazy private var hStack: UIStackView = {
     let stack = UIStackView()
     stack.axis = .horizontal
@@ -34,8 +36,6 @@ final class ImportanceHorizontalStack: UIView {
     segmentedControl.insertSegment(with: unimportantImageView.image, at: 0, animated: false)
     segmentedControl.insertSegment(withTitle: "нет", at: 1, animated: false)
     segmentedControl.insertSegment(with: importantImageView.image, at: 2, animated: false)
-       
-//    segmentedControl.selectedSegmentIndex = 1
     
     // TODO: Исправить цвет на .aOverlay или оставить .aBackIOSPrimary
     // (дизайн в figma расходится с отображением на симуляторе)
@@ -54,34 +54,17 @@ final class ImportanceHorizontalStack: UIView {
     fatalError("init(coder:) has not been implemented")
   }
   
-  func setImportance(_ importance: Importance) {
-    print(importance)
-    switch importance {
-    case .unimportant:
-      segmentedControl.selectedSegmentIndex = 0
-    case .normal:
-      segmentedControl.selectedSegmentIndex = 1
-    case .important:
-      segmentedControl.selectedSegmentIndex = 2
-    }
-  }
-  
-  func getImportance() -> Importance {
-    switch segmentedControl.selectedSegmentIndex {
-    case 0:
-      return .unimportant
-    case 1:
-      return .normal
-    case 2:
-      return .important
-    default:
-      return .normal
-    }
+  func setImportance(_ importanceIndex: Int) {
+    segmentedControl.selectedSegmentIndex = importanceIndex
   }
   
   private func customInit() {
-    setup()
+    addAction()
     setupConstraints()
+  }
+  
+  private func addAction() {
+    segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
   }
   
   private func setupConstraints() {
@@ -103,9 +86,9 @@ final class ImportanceHorizontalStack: UIView {
     }
   }
   
-  private func setup() {
-//    backgroundColor = .aBackSecondary
-//    layer.cornerRadius = 15
+  @objc func segmentedControlValueChanged(_ sender: UISegmentedControl) {
+    let selectedSegmentIndex = sender.selectedSegmentIndex
+    newSegmentedIndexSetDelegate?.setNewIndex(selectedSegmentIndex)
   }
 }
 

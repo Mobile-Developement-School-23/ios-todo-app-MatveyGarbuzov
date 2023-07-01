@@ -1,0 +1,5 @@
+#import <Foundation/Foundation.h>
+@interface PodsDummy_Pods_ios_todo_app_MatveyGarbuzov_ios_todo_app_MatveyGarbuzovUITests : NSObject
+@end
+@implementation PodsDummy_Pods_ios_todo_app_MatveyGarbuzov_ios_todo_app_MatveyGarbuzovUITests
+@end
