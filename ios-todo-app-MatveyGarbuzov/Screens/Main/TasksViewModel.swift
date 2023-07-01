@@ -48,7 +48,9 @@ class TasksViewModel {
   
   func isDoneToggle(at index: Int) {
     let oldItem = toDoItems[index]
-    let newItem = ToDoItem(id: oldItem.id, text: oldItem.text, importance: oldItem.importance, deadline: oldItem.deadline, isDone: !oldItem.isDone, createdAt: oldItem.createdAt, changedAt: oldItem.changedAt)
+    let newItem = ToDoItem(id: oldItem.id, text: oldItem.text,
+                           importance: oldItem.importance, deadline: oldItem.deadline,
+                           isDone: !oldItem.isDone, createdAt: oldItem.createdAt, changedAt: oldItem.changedAt)
     
     toDoItems[index] = newItem
   }
@@ -68,7 +70,9 @@ class TasksViewModel {
 
 extension TasksViewModel {
   var fileURL: String {
-    guard let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return "" }
+    guard let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+      return ""
+    }
     let fileURL = URL(fileURLWithPath: fileName, relativeTo: directoryURL).appendingPathExtension("json")
     
     return "\(fileURL.absoluteURL)"
@@ -105,8 +109,12 @@ extension TasksViewModel {
       toDoItems.append(ToDoItem(text: "Купить что-то", importance: .important, deadline: nil, changedAt: nil))
       toDoItems.append(ToDoItem(text: "Купить что-то", importance: .normal, deadline: nil, isDone: true, changedAt: nil))
       toDoItems.append(ToDoItem(text: "сделать зарядку", importance: .normal, deadline: nil, changedAt: nil))
-      toDoItems.append(ToDoItem(text: "Купить что-то, где-то, зачем-то, но зачем не очень понятно, но точно чтобы показать как обрезать текст текст текст", importance: .normal, deadline: Date(timeIntervalSince1970: 1686744616), changedAt: nil))
-      toDoItems.append(ToDoItem(text: "Купить что-то, где-то, зачем-то, но зачем не очень понятно, но точно чтобы показать как обрезать текст текст текст", importance: .normal, deadline: nil, changedAt: nil))
+      toDoItems.append(ToDoItem(
+        text: "Купить что-то, где-то, зачем-то, но зачем не очень понятно, но точно чтобы показать как обрезать текст текст текст",
+        importance: .normal, deadline: Date(timeIntervalSince1970: 1686744616), changedAt: nil))
+      toDoItems.append(ToDoItem(
+        text: "Купить что-то, где-то, зачем-то, но зачем не очень понятно, но точно чтобы показать как обрезать текст текст текст",
+        importance: .normal, deadline: nil, changedAt: nil))
       toDoItems.append(ToDoItem(text: "Купить что-то, где-то, зачем-то, но зачем?", importance: .normal, deadline: nil, changedAt: nil))
       
       toDoItems.append(ToDoItem(text: "Купить сыр", importance: .unimportant, deadline: nil, changedAt: nil))

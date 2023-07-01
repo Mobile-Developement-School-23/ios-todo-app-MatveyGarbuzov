@@ -17,7 +17,7 @@ class FileCache {
     return logger
   }()
 
-  
+
   func addTask(_ item: ToDoItem) {
     itemsDict[item.id] = item
   }

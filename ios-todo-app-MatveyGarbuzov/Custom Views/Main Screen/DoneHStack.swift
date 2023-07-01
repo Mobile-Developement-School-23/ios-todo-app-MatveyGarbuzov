@@ -24,7 +24,7 @@ final class DoneHStack: UIView {
   }()
   
   private lazy var doneLabel: UILabel = {
-    let label = UILabel.subhead(with: "Выполнено — 5")
+    let label = UILabel.subhead(with: "Выполнено — ")
     label.textColor = .aLabelTertiary
     
     return label
