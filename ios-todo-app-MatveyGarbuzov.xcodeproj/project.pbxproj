@@ -38,6 +38,7 @@
 		1C2271B12A4F989C001A1CE3 /* FileCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C2271B02A4F989C001A1CE3 /* FileCache.swift */; };
 		1C2271B72A4FC21B001A1CE3 /* CocoaLumberjack in Frameworks */ = {isa = PBXBuildFile; productRef = 1C2271B62A4FC21B001A1CE3 /* CocoaLumberjack */; };
 		1C2271B92A4FC21B001A1CE3 /* CocoaLumberjackSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 1C2271B82A4FC21B001A1CE3 /* CocoaLumberjackSwift */; };
+		1CADA2702A583DCB00198F71 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CADA26F2A583DCB00198F71 /* URLSession.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,6 +91,7 @@
 		1C2271AB2A4C70A2001A1CE3 /* TableViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewContainer.swift; sourceTree = "<group>"; };
 		1C2271AD2A4E187D001A1CE3 /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		1C2271B02A4F989C001A1CE3 /* FileCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCache.swift; sourceTree = "<group>"; };
+		1CADA26F2A583DCB00198F71 /* URLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +128,7 @@
 				1C10CC912A40356E00760713 /* CustomColors.swift */,
 				1C10CCA32A40510600760713 /* CustomLabels.swift */,
 				1C10CCAB2A42FB7500760713 /* CustomFonts.swift */,
+				1CADA26F2A583DCB00198F71 /* URLSession.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -427,6 +430,7 @@
 				1C10CCB02A434CA000760713 /* ContainerStack.swift in Sources */,
 				1C1274082A3D293200E6C952 /* AppDelegate.swift in Sources */,
 				1C1274402A3D2A4E00E6C952 /* ToDoListViewController.swift in Sources */,
+				1CADA2702A583DCB00198F71 /* URLSession.swift in Sources */,
 				1C10CCA82A41B84500760713 /* DetailVerticalStack.swift in Sources */,
 				1C12740A2A3D293200E6C952 /* SceneDelegate.swift in Sources */,
 				1C10CC982A40378500760713 /* DetailViewController.swift in Sources */,
