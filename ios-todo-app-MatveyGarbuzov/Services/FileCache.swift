@@ -16,8 +16,16 @@ class FileCache {
     DDLog.add(DDOSLogger.sharedInstance)
     return logger
   }()
-
-
+  
+  var isDirty: Bool {
+    get {
+      UserDefaults.standard.bool(forKey: "isDirty")
+    }
+    set {
+      UserDefaults.standard.set(newValue, forKey: "isDirty")
+    }
+  }
+  
   func addTask(_ item: ToDoItem) {
     itemsDict[item.id] = item
   }
