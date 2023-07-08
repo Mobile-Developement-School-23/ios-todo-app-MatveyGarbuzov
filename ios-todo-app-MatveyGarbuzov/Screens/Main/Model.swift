@@ -50,22 +50,22 @@ struct ToDoItem {
 extension ToDoItem {
   var json: Any {
     var dict: [String: Any] = [
-      "id": id,
-      "text": text,
-      "isDone": isDone,
-      "createdAt": createdAt.timeIntervalSince1970
+      JSONKeys.kId : id,
+      JSONKeys.kText : text,
+      JSONKeys.kDone : isDone,
+      JSONKeys.kCreatedAt : createdAt.timeIntervalSince1970
     ]
     
     if importance != .normal {
-      dict["importance"] = String(describing: importance)
+      dict[JSONKeys.kImportance] = String(describing: importance)
     }
     
     if let deadline = deadline {
-      dict["deadline"] = deadline.timeIntervalSince1970
+      dict[JSONKeys.kDeadline] = deadline.timeIntervalSince1970
     }
     
     if let changedAt = changedAt {
-      dict["changedAt"] = changedAt.timeIntervalSince1970
+      dict[JSONKeys.kChangedAt] = changedAt.timeIntervalSince1970
     }
     
     return dict
@@ -73,23 +73,50 @@ extension ToDoItem {
   
   static func parse(json: Any) -> ToDoItem? {
     guard let jsonDictionary = json as? [String: Any],
-          let id = jsonDictionary["id"] as? String,
-          let text = jsonDictionary["text"] as? String,
-          let createdAtTimestamp = jsonDictionary["createdAt"] as? TimeInterval else {
+          let id = jsonDictionary[JSONKeys.kId] as? String,
+          let text = jsonDictionary[JSONKeys.kText] as? String,
+          let createdAtTimestamp = jsonDictionary[JSONKeys.kCreatedAt] as? TimeInterval else {
       return nil
     }
-
-    let deadlineTimestamp = jsonDictionary["deadline"] as? TimeInterval
-    let changedAtTimestamp = jsonDictionary["changedAt"] as? TimeInterval
-    let isDone = jsonDictionary["isDone"] as? Bool ?? false
     
-    let importanceString = jsonDictionary["importance"] as? String ?? "normal"
+    let deadlineTimestamp = jsonDictionary[JSONKeys.kDeadline] as? TimeInterval
+    let changedAtTimestamp = jsonDictionary[JSONKeys.kChangedAt] as? TimeInterval
+    let isDone = jsonDictionary[JSONKeys.kDone] as? Bool ?? false
+    
+    let importanceString = jsonDictionary[JSONKeys.kImportance] as? String ?? "normal"
     let importance = Importance(rawValue: importanceString.lowercased()) ?? .normal
     let createdAt = Date(timeIntervalSince1970: createdAtTimestamp)
     let deadline = deadlineTimestamp.flatMap { Date(timeIntervalSince1970: $0) }
     let changedAt = changedAtTimestamp.flatMap { Date(timeIntervalSince1970: $0) }
-
+    
     return ToDoItem(id: id, text: text, importance: importance, deadline: deadline,
-                      isDone: isDone, createdAt: createdAt, changedAt: changedAt)
-    }
+                    isDone: isDone, createdAt: createdAt, changedAt: changedAt)
+  }
+  
+  func getJsonForNet(deviceID: String) -> [String: Any] {
+    var tempDictionary: [String: Any] = [:]
+    
+    tempDictionary[JSONKeys.kId] = id
+    tempDictionary[JSONKeys.kText] = text
+    tempDictionary[JSONKeys.kImportance] = importance
+    if deadline != nil { tempDictionary[JSONKeys.kImportance] = Int(deadline!.timeIntervalSince1970) }
+    tempDictionary[JSONKeys.kDone] = isDone
+    tempDictionary[JSONKeys.kCreatedAt] = Int(createdAt.timeIntervalSince1970)
+    if changedAt != nil { tempDictionary[JSONKeys.kChangedAt] = Int(changedAt!.timeIntervalSince1970) }
+    tempDictionary[JSONKeys.kLastUpdatedBy] = deviceID
+    
+    return tempDictionary
+  }
+}
+
+enum JSONKeys {
+  static let kId = "id"
+  static let kText = "text"
+  static let kImportance = "importance"
+  static let kDeadline = "deadline"
+  static let kDone = "done"
+  static let kColor = "color"
+  static let kCreatedAt = "created_at"
+  static let kChangedAt = "changed_at"
+  static let kLastUpdatedBy = "last_updated_by"
 }
